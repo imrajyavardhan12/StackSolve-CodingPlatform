@@ -1,6 +1,7 @@
 import express, { json } from "express"
 import dotenv from "dotenv"
 import cors from "cors"
+import cookieParser from 'cookie-parser'
 import authRoutes from "./routes/auth.routes.js"
 
 dotenv.config()
@@ -23,7 +24,6 @@ app.get('/',(req,res)=>{
 })
 
 app.use('api/v1/auth', authRoutes)
-
 app.listen(process.env.PORT,()=>{
     console.log(`server running on port ${process.env.PORT}`)
 })
