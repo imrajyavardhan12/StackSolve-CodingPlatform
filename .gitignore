@@ -1,2 +1,22 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Environment variables
 .env
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Build outputs
+dist/
+build/
+
+# Prisma generated
+backend/src/generated/
+
+# Editor
+.vscode/
+.idea/
