@@ -1,6 +1,7 @@
 import express, { json } from "express"
 import dotenv from "dotenv"
 import cors from "cors"
+import authRoutes from "./routes/auth.routes.js"
 
 dotenv.config()
 
@@ -20,6 +21,8 @@ app.use(cors({
 app.get('/',(req,res)=>{
     res.send('hey there its working ')
 })
+
+app.use('api/v1/auth', authRoutes)
 
 app.listen(process.env.PORT,()=>{
     console.log(`server running on port ${process.env.PORT}`)
