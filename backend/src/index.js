@@ -23,7 +23,7 @@ app.get('/',(req,res)=>{
     res.send('hey there its working ')
 })
 
-app.use('api/v1/auth', authRoutes)
+app.use('/api/v1/auth', authRoutes)
 app.listen(process.env.PORT,()=>{
     console.log(`server running on port ${process.env.PORT}`)
 })

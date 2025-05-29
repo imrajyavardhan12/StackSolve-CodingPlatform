@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 export const register = async (req , res)=>{
     const {email , password , name} = req.body;
+    console.log('inside register route')
 
     try {
         const existingUser = await db.user.findUnique({
