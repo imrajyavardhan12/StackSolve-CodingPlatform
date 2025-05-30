@@ -69,7 +69,6 @@ export const createProblem = async (req, res) => {
       message: "Message Created Successfully",
       problem: newProblem,
     });
-    
   } catch (error) {
     console.log(error);
     return res.status(500).json({
