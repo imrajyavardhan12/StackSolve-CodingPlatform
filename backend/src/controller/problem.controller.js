@@ -1,4 +1,5 @@
 import { db } from "../libs/db.js";
+import { getJudge0LanguageId, submitBatch, pollBatchResults } from "../libs/judge0.lib.js";
 
 export const createProblem = async (req, res) => {
   const {
@@ -73,6 +74,7 @@ export const createProblem = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       error: "Error While Creating Problem",
+      error : ` error is ${error}`
     });
   }
 };
