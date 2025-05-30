@@ -1,5 +1,9 @@
 import { db } from "../libs/db.js";
-import { getJudge0LanguageId, submitBatch, pollBatchResults } from "../libs/judge0.lib.js";
+import {
+  getJudge0LanguageId,
+  submitBatch,
+  pollBatchResults,
+} from "../libs/judge0.lib.js";
 
 export const createProblem = async (req, res) => {
   const {
@@ -74,12 +78,40 @@ export const createProblem = async (req, res) => {
     console.log(error);
     return res.status(500).json({
       error: "Error While Creating Problem",
-      error : ` error is ${error}`
     });
   }
 };
 
-export const getAllProblems = async (req, res) => {};
+export const getAllProblems = async (req, res) => {
+  try {
+    const problems = await db.problem.findMany({
+      include: {
+        solvedBy: {
+          where: {
+            userId: req.user.id,
+          },
+        },
+      },
+    });
+
+    if (!problems) {
+      return res.status(404).json({
+        error: "No problems Found",
+      });
+    }
+
+    res.status(200).json({
+      sucess: true,
+      message: "Message Fetched Successfully",
+      problems,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: "Error While Fetching Problems",
+    });
+  }
+};
 
 export const getProblemById = async (req, res) => {};
 
