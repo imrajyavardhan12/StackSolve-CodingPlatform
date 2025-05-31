@@ -142,7 +142,125 @@ export const getProblemById = async (req, res) => {
 
 };
 
-export const updateProblem = async (req, res) => {};
+export const updateProblem = async (req, res) => {
+  const { id } = req.params;
+  const updateFields = req.body;
+
+  try {
+
+    const existingProblem = await db.problem.findUnique({
+      where: { id },
+      include: {
+        user: {
+          select: { id: true, name: true, email: true }
+        }
+      }
+    });
+
+    if (!existingProblem) {
+      return res.status(404).json({
+        error: "Problem not found"
+      });
+    }
+
+    const isOwner = existingProblem.userId === req.user.id;
+    const isAdmin = req.user.role === "ADMIN";
+    
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({
+        error: "Access denied. You can only update your own problems or you must be an admin"
+      });
+    }
+
+    if (updateFields.referenceSolutions && updateFields.testcases) {
+      console.log("Validating updated reference solutions...");
+      
+      for (const [language, solutionCode] of Object.entries(updateFields.referenceSolutions)) {
+        const languageId = getJudge0LanguageId(language);
+
+        if (!languageId) {
+          return res.status(400).json({ 
+            error: `Language ${language} is not supported` 
+          });
+        }
+
+        const submissions = updateFields.testcases.map(({ input, output }) => ({
+          source_code: solutionCode,
+          language_id: languageId,
+          stdin: input,
+          expected_output: output,
+        }));
+
+        try {
+          const submissionResults = await submitBatch(submissions);
+          const tokens = submissionResults.map((res) => res.token);
+          const results = await pollBatchResults(tokens);
+
+          for (let i = 0; i < results.length; i++) {
+            const result = results[i];
+            if (result.status.id !== 3) {
+              return res.status(400).json({
+                error: `Updated solution validation failed`,
+                details: `Testcase ${i + 1} failed for ${language}: ${result.stderr || result.compile_output || 'Unknown error'}`
+              });
+            }
+          }
+        } catch (validationError) {
+          return res.status(400).json({
+            error: "Solution validation failed",
+            details: validationError.message
+          });
+        }
+      }
+    }
+
+    const updateData = {};
+    const allowedFields = [
+      'title', 'description', 'difficulty', 'tags', 'examples', 
+      'constraints', 'hints', 'editorial', 'testcases', 
+      'codeSnippets', 'referenceSolutions'
+    ];
+
+    allowedFields.forEach(field => {
+      if (updateFields[field] !== undefined) {
+        updateData[field] = updateFields[field];
+      }
+    });
+
+
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        error: "No valid fields provided for update"
+      });
+    }
+
+    const updatedProblem = await db.problem.update({
+      where: { id },
+      data: updateData,
+      include: {
+        user: {
+          select: { id: true, name: true, email: true }
+        }
+      }
+    });
+
+    console.log(`Problem ${id} updated by user ${req.user.id} (${req.user.email})`);
+
+    return res.status(200).json({
+      success: true,
+      message: "Problem updated successfully",
+      problem: updatedProblem,
+      updatedFields: Object.keys(updateData)
+    });
+
+  } catch (error) {
+    console.error("Error updating problem:", error);
+    return res.status(500).json({
+      error: "Internal server error while updating problem",
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+};
 
 export const deleteProblem = async (req, res) => {};
 
