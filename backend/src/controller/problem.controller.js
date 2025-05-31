@@ -249,6 +249,29 @@ export const updateProblem = async (req, res) => {
   }
 };
 
-export const deleteProblem = async (req, res) => {};
+export const deleteProblem = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const problem = await db.problem.findUnique({ where: { id } });
+
+    if (!problem) {
+      return res.status(404).json({ error: "Problem Not found" });
+    }
+
+    await db.problem.delete({ where: { id } });
+
+    res.status(200).json({
+      success: true,
+      message: "Problem deleted Successfully",
+    });
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({
+      error: "Error While deleting the problem",
+    });
+  }
+
+};
 
 export const getAllProblemsSolvedByUser = async (req, res) => {};
