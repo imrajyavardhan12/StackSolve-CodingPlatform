@@ -1,6 +1,7 @@
 import express from "express";
 import { authMiddleware } from "../middleware/auth.middleware.js";
-import { executeCode } from "../controllers/executeCode.controller.js";
+
+import { executeCode } from "../controller/execute.controller.js";
 
 
 const executionRoute = express.Router();
