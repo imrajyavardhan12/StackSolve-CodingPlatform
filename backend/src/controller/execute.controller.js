@@ -1,3 +1,5 @@
+import { submitBatch, pollBatchResults } from "../libs/judge0.lib.js";
+
 export const executeCode = async (req, res) => {
   try {
     const { source_code, language_id, stdin, expected_outputs, problemId } =
@@ -35,6 +37,9 @@ export const executeCode = async (req, res) => {
     })
 
   } catch (error) {
-    
+    console.error("Error executing code:", error);
+    return res.status(500).json({
+        error: "Error while executing code"
+    });
   }
 };
