@@ -27,6 +27,8 @@ app.get('/',(req,res)=>{
 
 app.use('/api/v1/auth', authRoutes)
 app.use('/api/v1/problems', problemRoutes)
+app.use('/api/v1/execute-code', executionRoute)
+
 
 
 app.listen(process.env.PORT,()=>{
