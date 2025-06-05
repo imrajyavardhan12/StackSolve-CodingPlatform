@@ -34,7 +34,7 @@ app.use('/api/v1/problems', problemRoutes)
 app.use('/api/v1/execute-code', executionRoute)
 app.use('/api/v1/submission', submissionRoute)
 app.use("/api/v1/playlist", playlistRoutes)
-app.use("api/v1/profile", profileRoutes)
+app.use("/api/v1/profile", profileRoutes)
 
 
 
