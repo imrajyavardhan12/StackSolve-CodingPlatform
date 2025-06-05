@@ -76,6 +76,40 @@ export const createPlayList = async (req, res) => {
     res.status(500).json({ error: "Failed to create playlist" });
   }
 };
-export const addProblemToPlaylist = async (req, res) => {};
+
+
+export const addProblemToPlaylist = async (req, res) => {
+  const { playlistId } = req.params;
+  const { problemIds } = req.body;
+
+  try {
+    if (!Array.isArray(problemIds) || problemIds.length === 0) {
+      return res.status(400).json({ error: "Invalid or missing problemIds" });
+    }
+
+    console.log(
+      problemIds.map((problemId) => ({
+        playlistId,
+        problemId,
+      }))
+    );
+
+    const problemsInPlaylist = await db.problemInPlaylist.createMany({
+      data: problemIds.map((problemId) => ({
+        playListId: playlistId,
+        problemId,
+      })),
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Problems added to playlist successfully",
+      problemsInPlaylist,
+    });
+  } catch (error) {
+    console.error("Error adding problems to playlist:", error.message);
+    res.status(500).json({ error: "Failed to add problems to playlist" });
+  }
+};
 export const deletePlayList = async (req, res) => {};
 export const removeProblemFromPlaylist = async (req, res) => {};
