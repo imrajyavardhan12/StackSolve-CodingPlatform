@@ -2,6 +2,8 @@ import { submitBatch, pollBatchResults, getLanguageName } from "../libs/judge0.l
 
 import { db } from "../libs/db.js";
 
+import { handleProblemSolved, handleSubmissionMade } from "./profile.controller.js";
+
 export const executeCode = async (req, res) => {
   try {
     const { source_code, language_id, stdin, expected_outputs, problemId } =
@@ -57,6 +59,8 @@ export const executeCode = async (req, res) => {
 
     console.log(detailedResults);
 
+    await handleSubmissionMade(userId);
+
     const submission = await db.submission.create({
       data: {
         userId,
@@ -96,6 +100,8 @@ export const executeCode = async (req, res) => {
         },
       });
     }
+
+    await handleProblemSolved(userId);
 
     const testCaseResults = detailedResults.map((result) => ({
       submissionId: submission.id,
