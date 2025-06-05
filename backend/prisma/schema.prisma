@@ -35,6 +35,9 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  dailyActivity UserDailyActivity[]
+  streak        UserStreak?
+  statistics    UserStatistics?
   problems Problem[]
   submission    Submission[]
   problemSolved ProblemSolved[]
