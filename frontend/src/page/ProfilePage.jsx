@@ -5,16 +5,18 @@ import StreakCard from '../components/StreakCard';
 import StatisticsOverview from '../components/StatisticsOverview';
 import ProgressBars from '../components/ProgressBars';
 import { Loader, RefreshCw, User, Calendar } from 'lucide-react';
+import CalendarHeatmap from '../components/CalendarHeatmap';
 
 const ProfilePage = () => {
   const { authUser } = useAuthStore();
-  const { dashboardData, isLoading, fetchDashboard, initializeProfile } = useProfileStore();
+  const { dashboardData, isLoading, fetchDashboard, initializeProfile, calendarData, calendarYear, isCalendarLoading, fetchCalendarData, changeCalendarYear } = useProfileStore();
 
   useEffect(() => {
     if (authUser) {
       fetchDashboard();
+      fetchCalendarData();
     }
-  }, [authUser, fetchDashboard]);
+  }, [authUser, fetchDashboard, fetchCalendarData]);
 
   const handleInitializeProfile = async () => {
     await initializeProfile();
@@ -22,6 +24,7 @@ const ProfilePage = () => {
 
   const handleRefresh = () => {
     fetchDashboard();
+    fetchCalendarData(calendarYear);
   };
 
   if (isLoading) {
@@ -83,6 +86,26 @@ const ProfilePage = () => {
         statistics={dashboardData.statistics} 
         progress={dashboardData.progress} 
       />
+
+      <div className="mb-6">
+  {isCalendarLoading ? (
+    <div className="card bg-base-100 shadow-xl">
+      <div className="card-body">
+        <div className="flex items-center justify-center py-8">
+          <Loader className="w-6 h-6 animate-spin mr-2" />
+          <span>Loading calendar data...</span>
+        </div>
+      </div>
+    </div>
+  ) : (
+    <CalendarHeatmap
+      calendarData={calendarData}
+      year={calendarYear}
+      onYearChange={changeCalendarYear}
+    />
+  )}
+</div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <StreakCard streak={dashboardData.streak} />
