@@ -59,6 +59,20 @@ export const createPlayList = async (req, res) => {
     const { name, description } = req.body;
     const userId = req.user.id;
 
+    const existingPlaylist = await db.playlist.findFirst({
+      where: {
+        name,
+        userId
+      }
+    });
+
+    if (existingPlaylist) {
+      return res.status(400).json({
+        success: false,
+        error: "A playlist with this name already exists"
+      });
+    }
+
     const playList = await db.playlist.create({
       data: {
         name,
@@ -66,7 +80,7 @@ export const createPlayList = async (req, res) => {
         userId,
       },
     });
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       message: "Playlist created successfully",
       playList,
