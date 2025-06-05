@@ -6,6 +6,9 @@ export const useProfileStore = create((set, get) => ({
   dashboardData: null,
   isLoading: false,
   error: null,
+  calendarData: [],  
+  calendarYear: new Date().getFullYear(),
+  isCalendarLoading: false,
 
   fetchDashboard: async () => {
     set({ isLoading: true, error: null });
@@ -20,11 +23,34 @@ export const useProfileStore = create((set, get) => ({
     }
   },
 
+    fetchCalendarData: async (year = new Date().getFullYear()) => {
+    set({ isCalendarLoading: true });
+    try {
+      const response = await axiosInstance.get(`/profile/calendar/${year}`);
+      set({ 
+        calendarData: response.data.data,
+        calendarYear: year,
+        isCalendarLoading: false 
+      });
+      return response.data.data;
+    } catch (error) {
+      console.error("Error fetching calendar data:", error);
+      set({ isCalendarLoading: false });
+      toast.error("Failed to fetch calendar data");
+      return [];
+    }
+  },
+
+    changeCalendarYear: (year) => {
+    get().fetchCalendarData(year);
+  },
+
   initializeProfile: async () => {
     try {
       await axiosInstance.post("/profile/initialize");
       toast.success("Profile initialized successfully");
       get().fetchDashboard();
+      get().fetchCalendarData();
     } catch (error) {
       console.error("Error initializing profile:", error);
       if (error.response?.status !== 400) {
@@ -35,5 +61,6 @@ export const useProfileStore = create((set, get) => ({
 
   refreshDashboard: () => {
     get().fetchDashboard();
+    get().fetchCalendarData(get().calendarYear);
   },
 }));
