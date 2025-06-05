@@ -112,6 +112,7 @@ export const addProblemToPlaylist = async (req, res) => {
         playListId: playlistId,
         problemId,
       })),
+      skipDuplicates: true
     });
 
     res.status(201).json({
@@ -155,9 +156,23 @@ export const removeProblemFromPlaylist = async (req, res) => {
       return res.status(400).json({ error: "Invalid or missing problemIds" });
     }
 
+        const playlist = await db.playlist.findFirst({
+      where: {
+        id: playlistId,
+        userId: req.user.id
+      }
+    });
+
+    if (!playlist) {
+      return res.status(404).json({
+        success: false,
+        error: "Playlist not found"
+      });
+    }
+
     const deletedProblem = await db.problemInPlaylist.deleteMany({
       where: {
-        playlistId,
+        playListId: playlistId,
         problemId: {
           in: problemIds,
         },
