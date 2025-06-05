@@ -127,9 +127,24 @@ export const addProblemToPlaylist = async (req, res) => {
 };
 
 export const deletePlayList = async (req, res) => {
-  const { playlistId } = req.params;
+    const { playlistId } = req.params;
 
   try {
+
+    const playlist = await db.playlist.findFirst({
+      where: {
+        id: playlistId,
+        userId: req.user.id 
+      }
+    });
+
+    if (!playlist) {
+      return res.status(404).json({ 
+        success: false,
+        error: "Playlist not found" 
+      });
+    }
+
     const deletedPlaylist = await db.playlist.delete({
       where: {
         id: playlistId,
@@ -142,10 +157,13 @@ export const deletePlayList = async (req, res) => {
       deletedPlaylist,
     });
   } catch (error) {
-    console.error("Error deleting playlist:", error.message);
-    res.status(500).json({ error: "Failed to delete playlist" });
+    console.error("Error deleting playlist:", error);
+    res.status(500).json({ 
+      success: false,
+      error: "Failed to delete playlist" 
+    });
   }
-};
+}
 
 export const removeProblemFromPlaylist = async (req, res) => {
       const { playlistId } = req.params;
