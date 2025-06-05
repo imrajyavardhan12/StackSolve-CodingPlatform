@@ -185,3 +185,22 @@ model UserStreak {
 
   @@index([userId])
 }
+
+model UserStatistics {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  totalSolved       Int      @default(0)
+  totalSubmissions  Int      @default(0)
+  easyCount         Int      @default(0)
+  mediumCount       Int      @default(0)
+  hardCount         Int      @default(0)
+  acceptanceRate    Float    @default(0.0)
+  averageAttempts   Float    @default(0.0)
+  lastCalculated    DateTime @default(now())
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
