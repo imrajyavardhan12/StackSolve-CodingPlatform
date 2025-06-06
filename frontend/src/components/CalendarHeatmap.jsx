@@ -52,12 +52,12 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
   };
 
   const getIntensityClass = (submissions, isCurrentMonth) => {
-    if (!isCurrentMonth) return 'bg-dark-surface/30 opacity-30';
-    if (submissions === 0) return 'bg-dark-surface/60';
-    if (submissions >= 1 && submissions <= 3) return 'bg-orange-400/40';
-    if (submissions >= 4 && submissions <= 9) return 'bg-orange-400/60';
-    if (submissions >= 10 && submissions <= 19) return 'bg-orange-400/80';
-    return 'bg-orange-400';
+    if (!isCurrentMonth) return 'bg-gray-700/40 opacity-40';
+    if (submissions === 0) return 'bg-gray-700/60';
+    if (submissions >= 1 && submissions <= 2) return 'bg-orange-500/50';
+    if (submissions >= 3 && submissions <= 5) return 'bg-orange-500/70';
+    if (submissions >= 6 && submissions <= 10) return 'bg-orange-500/90';
+    return 'bg-orange-500';
   };
 
   const months = generateMonthlyGrid();
@@ -93,19 +93,19 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
                         <div
                           key={`${monthIndex}-${weekIndex}-${dayIndex}`}
                           className={`
-                            relative w-4 h-4 rounded-sm cursor-pointer border border-primary/30
+                            relative w-4 h-4 rounded-sm cursor-pointer border border-gray-600/40
                             flex items-center justify-center
                             ${getIntensityClass(day.submissions, day.isCurrentMonth)}
-                            hover:ring-1 hover:ring-orange-400 hover:scale-125
+                            hover:ring-1 hover:ring-orange-400 hover:scale-110
                             transition-all duration-200
-                            ${day.submissions > 0 && day.isCurrentMonth ? 'shadow-sm' : ''}
+                            ${day.submissions > 0 && day.isCurrentMonth ? 'shadow-sm shadow-orange-500/30' : ''}
                           `}
                           onMouseEnter={() => setHoveredDate(day)}
                           onMouseLeave={() => setHoveredDate(null)}
                         >
                           {day.isCurrentMonth && day.submissions > 0 && (
                             <div className="absolute inset-0 flex items-center justify-center">
-                              <span className="text-[7px] font-bold text-white leading-none">
+                              <span className="text-[7px] font-bold text-white leading-none drop-shadow-sm">
                                 {day.submissions}
                               </span>
                             </div>
@@ -121,8 +121,8 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
         </div>
 
         {hoveredDate && (
-          <div className="mt-4 p-3 bg-dark-surface/80 border border-primary/20 text-white rounded-xl text-sm">
-            <strong>{hoveredDate.submissions}</strong> submissions on{' '}
+          <div className="mt-4 p-3 bg-dark-surface/80 border border-orange-400/30 text-white rounded-xl text-sm shadow-lg">
+            <strong className="text-orange-400">{hoveredDate.submissions}</strong> submissions on{' '}
             <strong>
               {hoveredDate.date.toLocaleDateString('en-US', { 
                 weekday: 'short',
@@ -142,11 +142,11 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
         <div className="flex items-center justify-center mt-6 text-xs text-gray-400">
           <span className="mr-2">Less</span>
           <div className="flex gap-1 mx-2">
-            <div className="w-2 h-2 rounded-sm bg-dark-surface/60 border border-primary/30" />
-            <div className="w-2 h-2 rounded-sm bg-orange-400/40 border border-primary/30" />
-            <div className="w-2 h-2 rounded-sm bg-orange-400/60 border border-primary/30" />
-            <div className="w-2 h-2 rounded-sm bg-orange-400/80 border border-primary/30" />
-            <div className="w-2 h-2 rounded-sm bg-orange-400 border border-primary/30" />
+            <div className="w-2 h-2 rounded-sm bg-gray-700/60 border border-gray-600/40" />
+            <div className="w-2 h-2 rounded-sm bg-orange-500/50 border border-gray-600/40" />
+            <div className="w-2 h-2 rounded-sm bg-orange-500/70 border border-gray-600/40" />
+            <div className="w-2 h-2 rounded-sm bg-orange-500/90 border border-gray-600/40" />
+            <div className="w-2 h-2 rounded-sm bg-orange-500 border border-gray-600/40" />
           </div>
           <span className="ml-2">More</span>
         </div>
