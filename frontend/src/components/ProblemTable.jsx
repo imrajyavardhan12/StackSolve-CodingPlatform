@@ -69,7 +69,7 @@ const ProblemsTable = ({ problems }) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-xl font-bold gradient-text mb-1">Problems</h3>
@@ -84,7 +84,7 @@ const ProblemsTable = ({ problems }) => {
         </button>
       </div>
 
-      <div className="glass-effect rounded-xl p-4 mb-6">
+      <div className="glass-effect rounded-xl p-4 mb-6 relative z-30">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
@@ -97,16 +97,16 @@ const ProblemsTable = ({ problems }) => {
             />
           </div>
           
-          <div className="dropdown dropdown-end">
+          <div className="dropdown dropdown-bottom dropdown-end">
             <label tabIndex={0} className="btn btn-sm glass-effect border-primary/20 w-full justify-between text-white">
               <span className="text-xs">{difficulty === "ALL" ? "All Difficulties" : difficulty}</span>
               <Filter className="w-3 h-3" />
             </label>
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow glass-effect rounded-box w-full mt-1 z-50">
-              <li><a onClick={() => setDifficulty("ALL")} className="hover:bg-primary/20 text-white text-xs">All Difficulties</a></li>
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-xl glass-effect rounded-box w-48 mt-2 z-[9999] border border-primary/20">
+              <li><a onClick={() => setDifficulty("ALL")} className="hover:bg-primary/20 text-white text-xs py-2">All Difficulties</a></li>
               {difficulties.map((diff) => (
                 <li key={diff}>
-                  <a onClick={() => setDifficulty(diff)} className="hover:bg-primary/20 text-white text-xs">
+                  <a onClick={() => setDifficulty(diff)} className="hover:bg-primary/20 text-white text-xs py-2">
                     {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
                   </a>
                 </li>
@@ -114,16 +114,16 @@ const ProblemsTable = ({ problems }) => {
             </ul>
           </div>
           
-          <div className="dropdown dropdown-end">
+          <div className="dropdown dropdown-bottom dropdown-end">
             <label tabIndex={0} className="btn btn-sm glass-effect border-primary/20 w-full justify-between text-white">
               <span className="text-xs">{selectedTag === "ALL" ? "All Tags" : selectedTag}</span>
               <Filter className="w-3 h-3" />
             </label>
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow glass-effect rounded-box w-full mt-1 max-h-40 overflow-y-auto z-50">
-              <li><a onClick={() => setSelectedTag("ALL")} className="hover:bg-primary/20 text-white text-xs">All Tags</a></li>
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-xl glass-effect rounded-box w-48 mt-2 max-h-48 overflow-y-auto z-[9999] border border-primary/20">
+              <li><a onClick={() => setSelectedTag("ALL")} className="hover:bg-primary/20 text-white text-xs py-2">All Tags</a></li>
               {allTags.map((tag) => (
                 <li key={tag}>
-                  <a onClick={() => setSelectedTag(tag)} className="hover:bg-primary/20 text-white text-xs">
+                  <a onClick={() => setSelectedTag(tag)} className="hover:bg-primary/20 text-white text-xs py-2">
                     {tag}
                   </a>
                 </li>
@@ -133,7 +133,7 @@ const ProblemsTable = ({ problems }) => {
         </div>
       </div>
 
-      <div className="glass-effect rounded-xl overflow-hidden">
+      <div className="glass-effect rounded-xl overflow-hidden relative z-10">
         <div className="overflow-x-auto">
           <table className="table table-sm w-full">
             <thead className="bg-gradient-to-r from-primary/10 to-secondary/10">
