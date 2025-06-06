@@ -42,13 +42,9 @@ const ProblemPage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [testcases, setTestCases] = useState([]);
-  
-  // Separate states for run vs submit
-  const [isRunning, setIsRunning] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [runResults, setRunResults] = useState(null);
 
-  const { executeCode, submission, isExecuting } = useExecutionStore();
+  const { executeCode, runCode, submission, isExecuting } = useExecutionStore();
 
   useEffect(() => {
     getProblemById(id);
@@ -83,10 +79,8 @@ const ProblemPage = () => {
     setCode(problem.codeSnippets?.[lang] || "");
   };
 
-  // Run Code - Only test without saving submission
   const handleRunCode = async (e) => {
     e.preventDefault();
-    setIsRunning(true);
     setRunResults(null);
     
     try {
@@ -94,41 +88,16 @@ const ProblemPage = () => {
       const stdin = problem.testcases.map((tc) => tc.input);
       const expected_outputs = problem.testcases.map((tc) => tc.output);
       
-      const response = await fetch('/api/v1/execute-code/run', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          source_code: code,
-          language_id,
-          stdin,
-          expected_outputs
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (data.success) {
-        setRunResults(data);
-      } else {
-        console.error('Run failed:', data.error);
-        // Handle error - maybe show toast
-      }
+      const data = await runCode(code, language_id, stdin, expected_outputs);
+      setRunResults(data);
     } catch (error) {
       console.error("Error running code:", error);
-      // Handle error - maybe show toast
-    } finally {
-      setIsRunning(false);
     }
   };
 
-  // Submit Solution - Full submission with saving
   const handleSubmitSolution = (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setRunResults(null); // Clear run results when submitting
+    setRunResults(null);
     
     try {
       const language_id = getLanguageId(selectedLanguage);
@@ -137,8 +106,6 @@ const ProblemPage = () => {
       executeCode(code, language_id, stdin, expected_outputs, id);
     } catch (error) {
       console.log("Error submitting solution", error);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -247,7 +214,6 @@ const ProblemPage = () => {
     }
   };
 
-  // Render run results
   const renderRunResults = () => {
     if (!runResults) return null;
 
@@ -432,20 +398,20 @@ const ProblemPage = () => {
                 <div className="flex justify-between items-center">
                   <button
                     className={`btn btn-primary gap-2 ${
-                      isRunning ? "loading" : ""
+                      isExecuting ? "loading" : ""
                     }`}
                     onClick={handleRunCode}
-                    disabled={isRunning || isExecuting}
+                    disabled={isExecuting}
                   >
-                    {!isRunning && <Play className="w-4 h-4" />}
-                    {isRunning ? "Running..." : "Run Code"}
+                    {!isExecuting && <Play className="w-4 h-4" />}
+                    {isExecuting ? "Running..." : "Run Code"}
                   </button>
                   <button 
                     className={`btn btn-success gap-2 ${
                       isExecuting ? "loading" : ""
                     }`}
                     onClick={handleSubmitSolution}
-                    disabled={isSubmitting || isExecuting}
+                    disabled={isExecuting}
                   >
                     {!isExecuting && <Send className="w-4 h-4" />}
                     {isExecuting ? "Submitting..." : "Submit Solution"}
@@ -456,10 +422,8 @@ const ProblemPage = () => {
           </div>
         </div>
 
-        {/* Show Run Results or Submission Results */}
         {runResults && renderRunResults()}
         
-        {/* Show Submission Results */}
         {submission && !runResults && (
           <div className="card bg-base-100 shadow-xl mt-6">
             <div className="card-body">
@@ -468,7 +432,6 @@ const ProblemPage = () => {
           </div>
         )}
 
-        {/* Show Test Cases when no results */}
         {!submission && !runResults && (
           <div className="card bg-base-100 shadow-xl mt-6">
             <div className="card-body">
