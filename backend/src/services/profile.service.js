@@ -85,10 +85,11 @@ export const getStreakCalendarData = async (userId, year = new Date().getFullYea
       }
     });
 
-    const calendarData = dailyActivities.map(activity => ({
+      const calendarData = dailyActivities.map(activity => ({
       date: activity.date.toISOString().split('T')[0],
-      count: activity.problemsSolved,
-      level: Math.min(Math.floor(activity.problemsSolved / 2) + 1, 4)
+      count: activity.submissionCount,
+      problemsSolved: activity.problemsSolved,
+      level: Math.min(Math.floor(activity.submissionCount / 2) + 1, 4)
     }));
 
     return calendarData;
