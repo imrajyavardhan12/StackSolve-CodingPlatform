@@ -5,8 +5,6 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
   const [hoveredDate, setHoveredDate] = useState(null);
 
   const currentYear = new Date().getFullYear();
-  const startOfYear = new Date(currentYear, 0, 1);
-  const endOfYear = new Date(currentYear, 11, 31);
 
   const activityMap = calendarData.reduce((acc, item) => {
     acc[item.date] = item;
