@@ -52,12 +52,12 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
   };
 
   const getIntensityClass = (submissions, isCurrentMonth) => {
-    if (!isCurrentMonth) return 'bg-base-100 opacity-30';
-    if (submissions === 0) return 'bg-base-200';
-    if (submissions >= 1 && submissions <= 3) return 'bg-success/40';
-    if (submissions >= 4 && submissions <= 9) return 'bg-success/60';
-    if (submissions >= 10 && submissions <= 19) return 'bg-success/80';
-    return 'bg-success';
+    if (!isCurrentMonth) return 'bg-dark-surface/30 opacity-30';
+    if (submissions === 0) return 'bg-dark-surface/60';
+    if (submissions >= 1 && submissions <= 3) return 'bg-primary/40';
+    if (submissions >= 4 && submissions <= 9) return 'bg-primary/60';
+    if (submissions >= 10 && submissions <= 19) return 'bg-primary/80';
+    return 'bg-primary';
   };
 
   const months = generateMonthlyGrid();
@@ -65,19 +65,19 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
   const activeDays = calendarData.filter(item => (item.count || 0) > 0).length;
 
   return (
-    <div className="card bg-base-100 shadow-xl">
-      <div className="card-body px-2">
-        <h2 className="card-title">
-          <Calendar className="w-6 h-6" />
+    <div className="glass-effect rounded-2xl border border-primary/20 bg-dark-surface/40">
+      <div className="p-6">
+        <h2 className="flex items-center gap-3 text-lg font-bold gradient-text-primary mb-4">
+          <Calendar className="w-5 h-5" />
           {currentYear} Submission Calendar
         </h2>
 
-        <div className="mb-4 flex gap-6">
-          <div className="text-sm text-base-content/70">
-            <span className="font-bold text-base-content text-lg">{totalSubmissions}</span> submissions in {currentYear}
+        <div className="mb-6 flex gap-6">
+          <div className="text-sm text-gray-300">
+            <span className="font-bold text-white text-base">{totalSubmissions}</span> submissions in {currentYear}
           </div>
-          <div className="text-sm text-base-content/70">
-            Total active days: <span className="font-bold text-base-content text-lg">{activeDays}</span>
+          <div className="text-sm text-gray-300">
+            Total active days: <span className="font-bold text-white text-base">{activeDays}</span>
           </div>
         </div>
 
@@ -85,7 +85,7 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
           <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-6 2xl:grid-cols-6 gap-8">
             {months.map((month, monthIndex) => (
               <div key={monthIndex} className="flex flex-col items-center">
-                <h3 className="font-semibold text-sm mb-3 text-center w-full">{month.name}</h3>
+                <h3 className="font-semibold text-sm mb-3 text-center w-full text-white">{month.name}</h3>
                 <div className="space-y-1">
                   {month.weeks.map((week, weekIndex) => (
                     <div key={weekIndex} className="flex gap-1">
@@ -93,7 +93,7 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
                         <div
                           key={`${monthIndex}-${weekIndex}-${dayIndex}`}
                           className={`
-                            relative w-4 h-4 rounded-sm cursor-pointer border border-base-300 
+                            relative w-4 h-4 rounded-sm cursor-pointer border border-primary/30
                             flex items-center justify-center
                             ${getIntensityClass(day.submissions, day.isCurrentMonth)}
                             hover:ring-1 hover:ring-primary hover:scale-125
@@ -121,7 +121,7 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
         </div>
 
         {hoveredDate && (
-          <div className="mt-4 p-2 bg-neutral text-neutral-content rounded text-sm">
+          <div className="mt-4 p-3 bg-dark-surface/80 border border-primary/20 text-white rounded-xl text-sm">
             <strong>{hoveredDate.submissions}</strong> submissions on{' '}
             <strong>
               {hoveredDate.date.toLocaleDateString('en-US', { 
@@ -132,21 +132,21 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
               })}
             </strong>
             {hoveredDate.problems > 0 && (
-              <span className="text-neutral-content/80">
+              <span className="text-gray-300">
                 {' '}• {hoveredDate.problems} problems solved
               </span>
             )}
           </div>
         )}
 
-        <div className="flex items-center justify-center mt-4 text-xs text-base-content/60">
+        <div className="flex items-center justify-center mt-6 text-xs text-gray-400">
           <span className="mr-2">Less</span>
           <div className="flex gap-1 mx-2">
-            <div className="w-2 h-2 rounded-sm bg-base-200 border border-base-300" />
-            <div className="w-2 h-2 rounded-sm bg-success/40 border border-base-300" />
-            <div className="w-2 h-2 rounded-sm bg-success/60 border border-base-300" />
-            <div className="w-2 h-2 rounded-sm bg-success/80 border border-base-300" />
-            <div className="w-2 h-2 rounded-sm bg-success border border-base-300" />
+            <div className="w-2 h-2 rounded-sm bg-dark-surface/60 border border-primary/30" />
+            <div className="w-2 h-2 rounded-sm bg-primary/40 border border-primary/30" />
+            <div className="w-2 h-2 rounded-sm bg-primary/60 border border-primary/30" />
+            <div className="w-2 h-2 rounded-sm bg-primary/80 border border-primary/30" />
+            <div className="w-2 h-2 rounded-sm bg-primary border border-primary/30" />
           </div>
           <span className="ml-2">More</span>
         </div>
