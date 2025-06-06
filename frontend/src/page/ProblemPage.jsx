@@ -310,7 +310,7 @@ const ProblemPage = () => {
           >
             {Object.keys(problem.codeSnippets || {}).map((lang) => (
               <option key={lang} value={lang}>
-                {lang.charAt(0).toUpperCase() + lang.slice(1)}
+                {lang === 'cpp' ? 'C++' : lang.charAt(0).toUpperCase() + lang.slice(1)}
               </option>
             ))}
           </select>
