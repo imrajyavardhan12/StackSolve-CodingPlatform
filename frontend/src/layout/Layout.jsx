@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar'
 
 const Layout = () => {
   return (
-    <div>
+    <div className="min-h-screen gradient-bg">
         <Navbar/>
         <Outlet/>
     </div>
