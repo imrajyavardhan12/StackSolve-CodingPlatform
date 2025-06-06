@@ -3,9 +3,8 @@ import { db } from "../libs/db.js";
 export const updateUserStreak = async (userId, activityDate = new Date()) => {
   try {
     const today = new Date(activityDate);
-    const istOffset = 5.5 * 60 * 60 * 1000;
-    const istDate = new Date(today.getTime() + istOffset);
-    const dateOnly = istDate.toISOString().split('T')[0];
+    const istDate = new Date(today.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+    const dateOnly = new Date(istDate.getFullYear(), istDate.getMonth(), istDate.getDate());
     
     let streakRecord = await db.userStreak.findUnique({
       where: { userId }
@@ -102,9 +101,8 @@ export const getStreakCalendarData = async (userId, year = new Date().getFullYea
 export const recordDailyActivity = async (userId, problemSolved = false, submissionMade = false) => {
   try {
     const today = new Date();
-    const istOffset = 5.5 * 60 * 60 * 1000;
-    const istDate = new Date(today.getTime() + istOffset);
-    const dateOnly = new Date(istDate.toISOString().split('T')[0]);
+    const istDate = new Date(today.toLocaleString("en-US", {timeZone: "Asia/Kolkata"}));
+    const dateOnly = new Date(istDate.getFullYear(), istDate.getMonth(), istDate.getDate());
 
     const dailyActivity = await db.userDailyActivity.upsert({
       where: {
