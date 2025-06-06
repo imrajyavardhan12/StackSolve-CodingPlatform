@@ -20,7 +20,6 @@ const ProblemsTable = ({ problems }) => {
   const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
 
-  // Extract all unique tags from problems
   const allTags = useMemo(() => {
     if (!Array.isArray(problems)) return [];
     const tagsSet = new Set();
@@ -28,10 +27,8 @@ const ProblemsTable = ({ problems }) => {
     return Array.from(tagsSet);
   }, [problems]);
 
-  // Define allowed difficulties
   const difficulties = ["EASY", "MEDIUM", "HARD"];
 
-  // Filter problems based on search, difficulty, and tags
   const filteredProblems = useMemo(() => {
     return (problems || [])
       .filter((problem) =>
@@ -45,7 +42,6 @@ const ProblemsTable = ({ problems }) => {
       );
   }, [problems, search, difficulty, selectedTag]);
 
-  // Pagination logic
   const itemsPerPage = 8;
   const totalPages = Math.ceil(filteredProblems.length / itemsPerPage);
   const paginatedProblems = useMemo(() => {
@@ -102,11 +98,21 @@ const ProblemsTable = ({ problems }) => {
               <span className="text-xs">{difficulty === "ALL" ? "All Difficulties" : difficulty}</span>
               <Filter className="w-3 h-3" />
             </label>
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-xl bg-dark-surface rounded-box w-48 mt-2 z-[9999] border border-primary/30">
-              <li><a onClick={() => setDifficulty("ALL")} className="hover:bg-primary/20 text-white text-xs py-2">All Difficulties</a></li>
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-2xl backdrop-blur-xl bg-[#1A1B23]/95 rounded-box w-48 mt-2 z-[9999] border border-primary/40">
+              <li>
+                <a 
+                  onClick={() => setDifficulty("ALL")} 
+                  className="hover:bg-primary/30 text-white text-xs py-2 px-3 rounded-lg transition-all duration-200 hover:text-white font-medium"
+                >
+                  All Difficulties
+                </a>
+              </li>
               {difficulties.map((diff) => (
                 <li key={diff}>
-                  <a onClick={() => setDifficulty(diff)} className="hover:bg-primary/20 text-white text-xs py-2">
+                  <a 
+                    onClick={() => setDifficulty(diff)} 
+                    className="hover:bg-primary/30 text-white text-xs py-2 px-3 rounded-lg transition-all duration-200 hover:text-white font-medium"
+                  >
                     {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
                   </a>
                 </li>
@@ -119,11 +125,21 @@ const ProblemsTable = ({ problems }) => {
               <span className="text-xs">{selectedTag === "ALL" ? "All Tags" : selectedTag}</span>
               <Filter className="w-3 h-3" />
             </label>
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-xl bg-dark-surface rounded-box w-48 mt-2 max-h-48 overflow-y-auto z-[9999] border border-primary/30">
-              <li><a onClick={() => setSelectedTag("ALL")} className="hover:bg-primary/20 text-white text-xs py-2">All Tags</a></li>
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-2xl backdrop-blur-xl bg-[#1A1B23]/95 rounded-box w-48 mt-2 max-h-48 overflow-y-auto z-[9999] border border-primary/40">
+              <li>
+                <a 
+                  onClick={() => setSelectedTag("ALL")} 
+                  className="hover:bg-primary/30 text-white text-xs py-2 px-3 rounded-lg transition-all duration-200 hover:text-white font-medium"
+                >
+                  All Tags
+                </a>
+              </li>
               {allTags.map((tag) => (
                 <li key={tag}>
-                  <a onClick={() => setSelectedTag(tag)} className="hover:bg-primary/20 text-white text-xs py-2">
+                  <a 
+                    onClick={() => setSelectedTag(tag)} 
+                    className="hover:bg-primary/30 text-white text-xs py-2 px-3 rounded-lg transition-all duration-200 hover:text-white font-medium"
+                  >
                     {tag}
                   </a>
                 </li>
@@ -260,8 +276,7 @@ const ProblemsTable = ({ problems }) => {
                 page = i + 1;
               } else if (currentPage >= totalPages - 2) {
                 page = totalPages - 4 + i;
-              } else {
-                page = currentPage - 2 + i;
+              } else {\n                page = currentPage - 2 + i;
               }
               
               return (
