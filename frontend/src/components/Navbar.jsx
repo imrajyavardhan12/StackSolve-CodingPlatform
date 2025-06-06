@@ -11,8 +11,8 @@ const Navbar = ()=>{
     return (
      <nav className="sticky top-0 z-50 w-full py-5">
       <div className="flex w-full justify-between mx-auto max-w-4xl glass-navbar shadow-lg backdrop-blur-lg p-4 rounded-2xl">
-        <Link to="/" className="flex items-center gap-3 cursor-pointer hover-glow transition-all duration-300">
-          <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center text-dark-navy font-bold text-lg animate-glow hover:bg-transparent hover:border-2 hover:border-primary transition-all duration-300">
+        <Link to="/" className="flex items-center gap-3 cursor-pointer transition-all duration-300">
+          <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center text-dark-navy font-bold text-lg animate-glow">
             <img 
               src="/stacksolve-icon.svg" 
               alt="StackSolve Logo" 
