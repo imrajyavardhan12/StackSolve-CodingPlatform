@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-/* StackSolve Custom Theme - ChaiCode Inspired */
+
 :root {
   --primary: #FF8C42;
   --secondary: #FFD23F;
