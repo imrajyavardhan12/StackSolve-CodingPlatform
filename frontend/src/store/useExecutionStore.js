@@ -2,13 +2,11 @@ import {create} from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 
-
-
 export const useExecutionStore = create((set)=>({
     isExecuting:false,
     submission:null,
 
-       executeCode:async ( source_code, language_id, stdin, expected_outputs, problemId)=>{
+    executeCode:async ( source_code, language_id, stdin, expected_outputs, problemId)=>{
         try {
             set({isExecuting:true});
             console.log("Submission:",JSON.stringify({
@@ -29,6 +27,25 @@ export const useExecutionStore = create((set)=>({
         }
         finally{
             set({isExecuting:false});
+        }
+    },
+
+    runCode: async (source_code, language_id, stdin, expected_outputs) => {
+        try {
+            set({ isExecuting: true });
+            const res = await axiosInstance.post("/execute-code/run", { 
+                source_code, 
+                language_id, 
+                stdin, 
+                expected_outputs 
+            });
+            return res.data;
+        } catch (error) {
+            console.error("Error running code:", error);
+            toast.error("Error running code");
+            throw error;
+        } finally {
+            set({ isExecuting: false });
         }
     }
 }))
