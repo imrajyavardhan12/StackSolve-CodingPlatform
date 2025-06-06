@@ -1,9 +1,9 @@
 function getLanguageName(languageId) {
     const LANGUAGE_NAMES = {
-      74: "TypeScript",
-      63: "JavaScript",
-      71: "Python",
-      62: "Java",
+      102: "JavaScript",
+      100: "Python",
+      91: "Java",
+      105: "C++",
     };
     return LANGUAGE_NAMES[languageId] || "Unknown";
   }
@@ -13,10 +13,11 @@ function getLanguageName(languageId) {
 
   export function getLanguageId(language) {
     const languageMap = {
-      "PYTHON": 71,
-      "JAVASCRIPT": 63,
-      "JAVA": 62,
-      "TypeScript": 74,
+      "PYTHON": 100,
+      "JAVASCRIPT": 102,
+      "JAVA": 91,
+      "CPP": 105,
+      "C++": 105,
     };
     return languageMap[language.toUpperCase()];
   }
