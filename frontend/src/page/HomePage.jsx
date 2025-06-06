@@ -140,10 +140,18 @@ const HomePage = () => {
       </section>
 
       <footer className="py-12 px-8 bg-gradient-to-r from-dark-navy via-dark-surface to-dark-navy border-t border-primary/20">
-        <div className="max-w-6xl mx-auto text-center">
-          <p className="text-gray-400 text-sm">
-            © 2025 StackSolve. Built with passion for Indian developers.
-          </p>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                <img src="/stacksolve-icon.svg" alt="StackSolve" className="h-5 w-5" />
+              </div>
+              <span className="text-xl font-bold gradient-text">StackSolve</span>
+            </div>
+            <p className="text-gray-400 text-sm text-center">
+              © 2025 StackSolve. Built with passion for Indian developers.
+            </p>
+          </div>
         </div>
       </footer>
     </div>
