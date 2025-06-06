@@ -54,10 +54,10 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
   const getIntensityClass = (submissions, isCurrentMonth) => {
     if (!isCurrentMonth) return 'bg-dark-surface/30 opacity-30';
     if (submissions === 0) return 'bg-dark-surface/60';
-    if (submissions >= 1 && submissions <= 3) return 'bg-primary/40';
-    if (submissions >= 4 && submissions <= 9) return 'bg-primary/60';
-    if (submissions >= 10 && submissions <= 19) return 'bg-primary/80';
-    return 'bg-primary';
+    if (submissions >= 1 && submissions <= 3) return 'bg-orange-400/40';
+    if (submissions >= 4 && submissions <= 9) return 'bg-orange-400/60';
+    if (submissions >= 10 && submissions <= 19) return 'bg-orange-400/80';
+    return 'bg-orange-400';
   };
 
   const months = generateMonthlyGrid();
@@ -96,7 +96,7 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
                             relative w-4 h-4 rounded-sm cursor-pointer border border-primary/30
                             flex items-center justify-center
                             ${getIntensityClass(day.submissions, day.isCurrentMonth)}
-                            hover:ring-1 hover:ring-primary hover:scale-125
+                            hover:ring-1 hover:ring-orange-400 hover:scale-125
                             transition-all duration-200
                             ${day.submissions > 0 && day.isCurrentMonth ? 'shadow-sm' : ''}
                           `}
@@ -143,10 +143,10 @@ const CalendarHeatmap = ({ calendarData = [] }) => {
           <span className="mr-2">Less</span>
           <div className="flex gap-1 mx-2">
             <div className="w-2 h-2 rounded-sm bg-dark-surface/60 border border-primary/30" />
-            <div className="w-2 h-2 rounded-sm bg-primary/40 border border-primary/30" />
-            <div className="w-2 h-2 rounded-sm bg-primary/60 border border-primary/30" />
-            <div className="w-2 h-2 rounded-sm bg-primary/80 border border-primary/30" />
-            <div className="w-2 h-2 rounded-sm bg-primary border border-primary/30" />
+            <div className="w-2 h-2 rounded-sm bg-orange-400/40 border border-primary/30" />
+            <div className="w-2 h-2 rounded-sm bg-orange-400/60 border border-primary/30" />
+            <div className="w-2 h-2 rounded-sm bg-orange-400/80 border border-primary/30" />
+            <div className="w-2 h-2 rounded-sm bg-orange-400 border border-primary/30" />
           </div>
           <span className="ml-2">More</span>
         </div>
