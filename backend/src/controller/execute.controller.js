@@ -141,3 +141,59 @@ export const executeCode = async (req, res) => {
     res.status(500).json({ error: "Failed to execute code" });
   }
 };
+
+export const runCode = async (req, res) => {
+  try {
+    const { source_code, language_id, stdin, expected_outputs } = req.body;
+
+    if (!Array.isArray(stdin) || stdin.length === 0 || 
+        !Array.isArray(expected_outputs) || 
+        expected_outputs.length !== stdin.length) {
+      return res.status(400).json({ error: "Invalid or Missing test cases" });
+    }
+
+    const submissions = stdin.map((input) => ({
+      source_code,
+      language_id,
+      stdin: input,
+    }));
+
+    const submitResponse = await submitBatch(submissions);
+    const tokens = submitResponse.map((res) => res.token);
+    const results = await pollBatchResults(tokens);
+
+    let allPassed = true;
+    const detailedResults = results.map((result, i) => {
+      const stdout = result.stdout?.trim();
+      const expected_output = expected_outputs[i]?.trim();
+      const passed = stdout === expected_output;
+      
+      if (!passed) allPassed = false;
+
+      return {
+        testCase: i + 1,
+        passed,
+        stdout,
+        expected: expected_output,
+        stderr: result.stderr || null,
+        compile_output: result.compile_output || null,
+        status: result.status.description,
+        memory: result.memory ? `${result.memory} KB` : undefined,
+        time: result.time ? `${result.time} s` : undefined,
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Code executed successfully!",
+      results: detailedResults,
+      allPassed,
+      totalTests: detailedResults.length,
+      passedTests: detailedResults.filter(r => r.passed).length
+    });
+
+  } catch (error) {
+    console.error("Error running code:", error.message);
+    res.status(500).json({ error: "Failed to run code" });
+  }
+};
