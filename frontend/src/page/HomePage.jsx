@@ -21,7 +21,7 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-8">
         <section className="hero min-h-screen flex items-center justify-center relative overflow-hidden">
           <div className="absolute inset-0">
             <div className="absolute top-16 left-0 w-1/3 h-1/3 bg-primary/20 opacity-30 blur-3xl rounded-full animate-pulse delay-100"></div>
@@ -31,19 +31,19 @@ const HomePage = () => {
           
           <div className="hero-content text-center z-10 w-full px-4">
             <div className="max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-8 leading-tight">
                 <span className="gradient-text">Master Coding</span>
                 <br />
                 <span className="gradient-text-primary">Interviews</span>
               </h1>
               
-              <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
                 A Platform Inspired by Leetcode which helps you to prepare for coding
                 interviews and helps you to improve your coding skills by solving coding
                 problems
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
                 <button className="btn btn-lg bg-gradient-to-r from-primary to-secondary text-dark-navy border-0 hover-glow font-bold px-8 rounded-xl">
                   Start Coding Now
                 </button>
@@ -78,32 +78,32 @@ const HomePage = () => {
         </section>
       </div>
 
-      <section className="py-16 px-6 gradient-bg-light">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 gradient-text">
+      <section className="py-20 px-8 gradient-bg-light">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 gradient-text">
             Why Choose StackSolve?
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="glass-effect rounded-xl p-6 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20">
-              <div className="text-2xl mb-4 text-center text-primary font-bold">TARGET</div>
-              <h3 className="text-xl font-bold mb-3 text-center gradient-text-primary">Curated Problems</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="glass-effect rounded-xl p-8 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20">
+              <div className="text-2xl mb-6 text-center text-primary font-bold">TARGET</div>
+              <h3 className="text-xl font-bold mb-4 text-center gradient-text-primary">Curated Problems</h3>
               <p className="text-gray-300 text-center text-sm leading-relaxed">
                 Hand-picked coding problems from top Indian and global tech companies to help you prepare for real interviews.
               </p>
             </div>
 
-            <div className="glass-effect rounded-xl p-6 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-secondary/20">
-              <div className="text-2xl mb-4 text-center text-secondary font-bold">TRACK</div>
-              <h3 className="text-xl font-bold mb-3 text-center gradient-text-primary">Progress Tracking</h3>
+            <div className="glass-effect rounded-xl p-8 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-secondary/20">
+              <div className="text-2xl mb-6 text-center text-secondary font-bold">TRACK</div>
+              <h3 className="text-xl font-bold mb-4 text-center gradient-text-primary">Progress Tracking</h3>
               <p className="text-gray-300 text-center text-sm leading-relaxed">
                 Track your learning journey with detailed analytics, performance insights, and personalized recommendations.
               </p>
             </div>
 
-            <div className="glass-effect rounded-xl p-6 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20">
-              <div className="text-2xl mb-4 text-center text-primary font-bold">COMPETE</div>
-              <h3 className="text-xl font-bold mb-3 text-center gradient-text-primary">Competitions</h3>
+            <div className="glass-effect rounded-xl p-8 cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20">
+              <div className="text-2xl mb-6 text-center text-primary font-bold">COMPETE</div>
+              <h3 className="text-xl font-bold mb-4 text-center gradient-text-primary">Competitions</h3>
               <p className="text-gray-300 text-center text-sm leading-relaxed">
                 Participate in coding contests, challenge yourself, and compete with developers across India.
               </p>
@@ -112,10 +112,10 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="py-16 px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-3 gradient-text">
+      <section className="py-20 px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
               Featured Problems
             </h2>
             <p className="text-lg text-gray-300">
@@ -123,52 +123,24 @@ const HomePage = () => {
             </p>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              {
-                problems.length > 0 ? (
-                  <ProblemTable problems={problems}/>
-                ) : (
-                  <div className="glass-effect rounded-xl p-8 text-center">
-                    <div className="text-2xl mb-4 text-primary font-bold">SEARCH</div>
-                    <h3 className="text-xl font-bold mb-3 gradient-text-primary">No Problems Found</h3>
-                    <p className="text-gray-300 text-sm">
-                      Problems will appear here once they're added to the platform.
-                    </p>
-                  </div>
-                )
-              }
-            </div>
-            
-            <div className="lg:col-span-1">
-              <div className="glass-effect rounded-xl p-6">
-                <h3 className="text-lg font-bold mb-4 gradient-text-primary">Quick Stats</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-300 text-sm">Total Problems</span>
-                    <span className="text-primary font-semibold">{problems?.length || 0}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-300 text-sm">Easy</span>
-                    <span className="text-success font-semibold">{problems?.filter(p => p.difficulty === 'EASY').length || 0}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-300 text-sm">Medium</span>
-                    <span className="text-warning font-semibold">{problems?.filter(p => p.difficulty === 'MEDIUM').length || 0}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-300 text-sm">Hard</span>
-                    <span className="text-error font-semibold">{problems?.filter(p => p.difficulty === 'HARD').length || 0}</span>
-                  </div>
-                </div>
+          {
+            problems.length > 0 ? (
+              <ProblemTable problems={problems}/>
+            ) : (
+              <div className="glass-effect rounded-xl p-12 text-center max-w-md mx-auto">
+                <div className="text-2xl mb-4 text-primary font-bold">SEARCH</div>
+                <h3 className="text-xl font-bold mb-3 gradient-text-primary">No Problems Found</h3>
+                <p className="text-gray-300 text-sm">
+                  Problems will appear here once they're added to the platform.
+                </p>
               </div>
-            </div>
-          </div>
+            )
+          }
         </div>
       </section>
 
-      <footer className="py-8 px-6 border-t border-primary/20">
-        <div className="max-w-7xl mx-auto text-center">
+      <footer className="py-12 px-8 bg-gradient-to-r from-dark-navy via-dark-surface to-dark-navy border-t border-primary/20">
+        <div className="max-w-6xl mx-auto text-center">
           <p className="text-gray-400 text-sm">
             © 2025 StackSolve. Built with passion for Indian developers.
           </p>
