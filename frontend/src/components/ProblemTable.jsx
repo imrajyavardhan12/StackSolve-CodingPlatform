@@ -276,7 +276,8 @@ const ProblemsTable = ({ problems }) => {
                 page = i + 1;
               } else if (currentPage >= totalPages - 2) {
                 page = totalPages - 4 + i;
-              } else {\n                page = currentPage - 2 + i;
+              } else {
+                page = currentPage - 2 + i;
               }
               
               return (
