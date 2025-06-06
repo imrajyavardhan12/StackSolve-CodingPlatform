@@ -46,7 +46,7 @@ const ProblemsTable = ({ problems }) => {
   }, [problems, search, difficulty, selectedTag]);
 
   // Pagination logic
-  const itemsPerPage = 10;
+  const itemsPerPage = 8;
   const totalPages = Math.ceil(filteredProblems.length / itemsPerPage);
   const paginatedProblems = useMemo(() => {
     return filteredProblems.slice(
@@ -69,14 +69,14 @@ const ProblemsTable = ({ problems }) => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto">
-      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
+    <div className="w-full">
+      <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-3xl font-bold gradient-text mb-2">Problems</h2>
-          <p className="text-gray-300">Choose your challenge and start coding</p>
+          <h3 className="text-xl font-bold gradient-text mb-1">Problems</h3>
+          <p className="text-gray-400 text-sm">Choose your challenge and start coding</p>
         </div>
         <button
-          className="btn bg-gradient-to-r from-primary to-secondary text-dark-navy border-0 hover-glow font-semibold"
+          className="btn btn-sm bg-gradient-to-r from-primary to-secondary text-dark-navy border-0 hover-glow font-semibold"
           onClick={() => setIsCreateModalOpen(true)}
         >
           <Plus className="w-4 h-4" />
@@ -84,29 +84,29 @@ const ProblemsTable = ({ problems }) => {
         </button>
       </div>
 
-      <div className="glass-effect rounded-2xl p-6 mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          <div className="relative col-span-1 md:col-span-2">
+      <div className="glass-effect rounded-xl p-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Search problems..."
-              className="input input-bordered w-full pl-10 glass-effect border-primary/20 text-white placeholder-gray-400"
+              className="input input-sm input-bordered w-full pl-10 glass-effect border-primary/20 text-white placeholder-gray-400"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           
           <div className="dropdown">
-            <label tabIndex={0} className="btn glass-effect border-primary/20 w-full justify-between text-white">
-              <span>{difficulty === "ALL" ? "All Difficulties" : difficulty}</span>
-              <Filter className="w-4 h-4" />
+            <label tabIndex={0} className="btn btn-sm glass-effect border-primary/20 w-full justify-between text-white">
+              <span className="text-xs">{difficulty === "ALL" ? "All Difficulties" : difficulty}</span>
+              <Filter className="w-3 h-3" />
             </label>
             <ul tabIndex={0} className="dropdown-content menu p-2 shadow glass-effect rounded-box w-full mt-1">
-              <li><a onClick={() => setDifficulty("ALL")} className="hover:bg-primary/20 text-white">All Difficulties</a></li>
+              <li><a onClick={() => setDifficulty("ALL")} className="hover:bg-primary/20 text-white text-xs">All Difficulties</a></li>
               {difficulties.map((diff) => (
                 <li key={diff}>
-                  <a onClick={() => setDifficulty(diff)} className="hover:bg-primary/20 text-white">
+                  <a onClick={() => setDifficulty(diff)} className="hover:bg-primary/20 text-white text-xs">
                     {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
                   </a>
                 </li>
@@ -115,15 +115,15 @@ const ProblemsTable = ({ problems }) => {
           </div>
           
           <div className="dropdown">
-            <label tabIndex={0} className="btn glass-effect border-primary/20 w-full justify-between text-white">
-              <span>{selectedTag === "ALL" ? "All Tags" : selectedTag}</span>
-              <Filter className="w-4 h-4" />
+            <label tabIndex={0} className="btn btn-sm glass-effect border-primary/20 w-full justify-between text-white">
+              <span className="text-xs">{selectedTag === "ALL" ? "All Tags" : selectedTag}</span>
+              <Filter className="w-3 h-3" />
             </label>
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow glass-effect rounded-box w-full mt-1 max-h-60 overflow-y-auto">
-              <li><a onClick={() => setSelectedTag("ALL")} className="hover:bg-primary/20 text-white">All Tags</a></li>
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow glass-effect rounded-box w-full mt-1 max-h-40 overflow-y-auto">
+              <li><a onClick={() => setSelectedTag("ALL")} className="hover:bg-primary/20 text-white text-xs">All Tags</a></li>
               {allTags.map((tag) => (
                 <li key={tag}>
-                  <a onClick={() => setSelectedTag(tag)} className="hover:bg-primary/20 text-white">
+                  <a onClick={() => setSelectedTag(tag)} className="hover:bg-primary/20 text-white text-xs">
                     {tag}
                   </a>
                 </li>
@@ -133,16 +133,16 @@ const ProblemsTable = ({ problems }) => {
         </div>
       </div>
 
-      <div className="glass-effect rounded-2xl overflow-hidden">
+      <div className="glass-effect rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="table table-lg w-full">
+          <table className="table table-sm w-full">
             <thead className="bg-gradient-to-r from-primary/10 to-secondary/10">
               <tr className="border-b border-primary/20">
-                <th className="text-white font-semibold">Status</th>
-                <th className="text-white font-semibold">Title</th>
-                <th className="text-white font-semibold">Tags</th>
-                <th className="text-white font-semibold">Difficulty</th>
-                <th className="text-white font-semibold">Actions</th>
+                <th className="text-white font-semibold text-xs">Status</th>
+                <th className="text-white font-semibold text-xs">Title</th>
+                <th className="text-white font-semibold text-xs">Tags</th>
+                <th className="text-white font-semibold text-xs">Difficulty</th>
+                <th className="text-white font-semibold text-xs">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -153,42 +153,42 @@ const ProblemsTable = ({ problems }) => {
                   );
                   return (
                     <tr key={problem.id} className="border-b border-primary/10 hover:bg-primary/5 transition-colors">
-                      <td>
+                      <td className="py-2">
                         <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
                             checked={isSolved}
                             readOnly
-                            className="checkbox checkbox-sm checkbox-primary"
+                            className="checkbox checkbox-xs checkbox-primary"
                           />
-                          {isSolved && <span className="text-success font-semibold">Solved</span>}
+                          {isSolved && <span className="text-success font-semibold text-xs">✓</span>}
                         </div>
                       </td>
-                      <td>
-                        <Link to={`/problem/${problem.id}`} className="font-semibold text-white hover:text-primary transition-colors">
+                      <td className="py-2">
+                        <Link to={`/problem/${problem.id}`} className="font-medium text-white hover:text-primary transition-colors text-sm">
                           {problem.title}
                         </Link>
                       </td>
-                      <td>
+                      <td className="py-2">
                         <div className="flex flex-wrap gap-1 max-w-xs">
                           {(problem.tags || []).slice(0, 2).map((tag, idx) => (
                             <span
                               key={idx}
-                              className="badge badge-outline border-primary/50 text-primary text-xs"
+                              className="badge badge-xs badge-outline border-primary/50 text-primary"
                             >
                               {tag}
                             </span>
                           ))}
                           {problem.tags && problem.tags.length > 2 && (
-                            <span className="badge badge-outline border-gray-500 text-gray-400 text-xs">
+                            <span className="badge badge-xs badge-outline border-gray-500 text-gray-400">
                               +{problem.tags.length - 2}
                             </span>
                           )}
                         </div>
                       </td>
-                      <td>
+                      <td className="py-2">
                         <span
-                          className={`badge font-semibold text-xs ${
+                          className={`badge badge-xs font-medium ${
                             problem.difficulty === "EASY"
                               ? "badge-success text-white"
                               : problem.difficulty === "MEDIUM"
@@ -199,25 +199,25 @@ const ProblemsTable = ({ problems }) => {
                           {problem.difficulty}
                         </span>
                       </td>
-                      <td>
-                        <div className="flex gap-2 items-center">
+                      <td className="py-2">
+                        <div className="flex gap-1 items-center">
                           <button
-                            className="btn btn-sm glass-effect border-primary/20 text-primary hover:bg-primary/20"
+                            className="btn btn-xs glass-effect border-primary/20 text-primary hover:bg-primary/20"
                             onClick={() => handleAddToPlaylist(problem.id)}
                           >
-                            <Bookmark className="w-4 h-4" />
+                            <Bookmark className="w-3 h-3" />
                           </button>
                           
                           {authUser?.role === "ADMIN" && (
                             <>
                               <button
                                 onClick={() => handleDelete(problem.id)}
-                                className="btn btn-sm btn-error"
+                                className="btn btn-xs btn-error"
                               >
-                                <TrashIcon className="w-4 h-4" />
+                                <TrashIcon className="w-3 h-3" />
                               </button>
-                              <button disabled className="btn btn-sm btn-warning">
-                                <PencilIcon className="w-4 h-4" />
+                              <button disabled className="btn btn-xs btn-warning">
+                                <PencilIcon className="w-3 h-3" />
                               </button>
                             </>
                           )}
@@ -230,8 +230,8 @@ const ProblemsTable = ({ problems }) => {
                 <tr>
                   <td colSpan={5} className="text-center py-8">
                     <div className="text-gray-400">
-                      <div className="text-2xl mb-2">No problems found</div>
-                      <div>Try adjusting your search criteria or filters</div>
+                      <div className="text-lg mb-1">No problems found</div>
+                      <div className="text-xs">Try adjusting your search criteria or filters</div>
                     </div>
                   </td>
                 </tr>
@@ -242,16 +242,16 @@ const ProblemsTable = ({ problems }) => {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-4 mt-8">
+        <div className="flex justify-center items-center gap-2 mt-6">
           <button
-            className="btn glass-effect border-primary/20 text-white hover:bg-primary/20 disabled:opacity-50"
+            className="btn btn-xs glass-effect border-primary/20 text-white hover:bg-primary/20 disabled:opacity-50"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((prev) => prev - 1)}
           >
-            Previous
+            Prev
           </button>
           
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
               let page;
               if (totalPages <= 5) {
@@ -267,7 +267,7 @@ const ProblemsTable = ({ problems }) => {
               return (
                 <button
                   key={page}
-                  className={`btn btn-sm ${
+                  className={`btn btn-xs ${
                     currentPage === page
                       ? "bg-primary text-dark-navy border-primary"
                       : "glass-effect border-primary/20 text-white hover:bg-primary/20"
@@ -281,7 +281,7 @@ const ProblemsTable = ({ problems }) => {
           </div>
           
           <button
-            className="btn glass-effect border-primary/20 text-white hover:bg-primary/20 disabled:opacity-50"
+            className="btn btn-xs glass-effect border-primary/20 text-white hover:bg-primary/20 disabled:opacity-50"
             disabled={currentPage === totalPages}
             onClick={() => setCurrentPage((prev) => prev + 1)}
           >
