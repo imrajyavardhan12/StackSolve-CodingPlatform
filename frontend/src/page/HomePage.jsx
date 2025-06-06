@@ -44,10 +44,10 @@ const HomePage = () => {
 
             <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
               <button className="btn btn-lg bg-gradient-to-r from-primary to-secondary text-dark-navy border-0 hover-glow font-bold text-lg px-8 rounded-xl">
-                🚀 Start Coding Now
+                Start Coding Now
               </button>
-              <button className="btn btn-lg btn-outline border-primary text-primary hover:bg-primary hover:border-primary hover:text-dark-navy font-bold text-lg px-8 rounded-xl transition-all duration-300">
-                📚 Browse Problems
+              <button className="btn btn-lg btn-outline border-primary text-primary hover:bg-primary/10 hover:border-primary hover:text-primary font-bold text-lg px-8 rounded-xl transition-all duration-300">
+                Browse Problems
               </button>
             </div>
 
@@ -89,24 +89,24 @@ const HomePage = () => {
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="glass-effect rounded-2xl p-8 hover-scale cursor-pointer">
-              <div className="text-6xl mb-6 text-center">🎯</div>
+            <div className="glass-effect rounded-2xl p-8 cursor-pointer">
+              <div className="text-4xl mb-6 text-center text-primary font-bold">TARGET</div>
               <h3 className="text-2xl font-bold mb-4 text-center gradient-text-primary">Curated Problems</h3>
               <p className="text-gray-300 text-center leading-relaxed">
                 Hand-picked coding problems from top Indian and global tech companies to help you prepare for real interviews.
               </p>
             </div>
 
-            <div className="glass-effect rounded-2xl p-8 hover-scale cursor-pointer">
-              <div className="text-6xl mb-6 text-center">📊</div>
+            <div className="glass-effect rounded-2xl p-8 cursor-pointer">
+              <div className="text-4xl mb-6 text-center text-secondary font-bold">TRACK</div>
               <h3 className="text-2xl font-bold mb-4 text-center gradient-text-primary">Progress Tracking</h3>
               <p className="text-gray-300 text-center leading-relaxed">
                 Track your learning journey with detailed analytics, performance insights, and personalized recommendations.
               </p>
             </div>
 
-            <div className="glass-effect rounded-2xl p-8 hover-scale cursor-pointer">
-              <div className="text-6xl mb-6 text-center">🏆</div>
+            <div className="glass-effect rounded-2xl p-8 cursor-pointer">
+              <div className="text-4xl mb-6 text-center text-primary font-bold">COMPETE</div>
               <h3 className="text-2xl font-bold mb-4 text-center gradient-text-primary">Competitions</h3>
               <p className="text-gray-300 text-center leading-relaxed">
                 Participate in coding contests, challenge yourself, and compete with developers across India.
@@ -133,7 +133,7 @@ const HomePage = () => {
             ) : (
               <div className="text-center">
                 <div className="glass-effect rounded-2xl p-12 max-w-md mx-auto">
-                  <div className="text-6xl mb-6">🔍</div>
+                  <div className="text-4xl mb-6 text-primary font-bold">SEARCH</div>
                   <h3 className="text-2xl font-bold mb-4 gradient-text-primary">No Problems Found</h3>
                   <p className="text-gray-300">
                     Problems will appear here once they're added to the platform.
@@ -145,28 +145,53 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="py-20 px-4 gradient-bg-light">
+      <footer className="py-16 px-4 gradient-bg-light border-t border-primary/20">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-black gradient-text-primary mb-2">50K+</div>
-              <div className="text-gray-300 text-lg">Active Users</div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-lg flex items-center justify-center">
+                  <img src="/stacksolve-icon.svg" alt="StackSolve" className="h-6 w-6" />
+                </div>
+                <span className="text-2xl font-bold gradient-text">StackSolve</span>
+              </div>
+              <p className="text-gray-300 mb-4 max-w-md">
+                Master coding interviews with our comprehensive platform designed for Indian developers. Practice, learn, and succeed.
+              </p>
+              <div className="flex gap-4">
+                <a href="#" className="text-gray-400 hover:text-primary transition-colors">Privacy Policy</a>
+                <a href="#" className="text-gray-400 hover:text-primary transition-colors">Terms of Service</a>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-black gradient-text-primary mb-2">1,200+</div>
-              <div className="text-gray-300 text-lg">Coding Problems</div>
+            
+            <div>
+              <h4 className="text-white font-semibold mb-4">Platform</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Problems</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Contests</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Discuss</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Interview Prep</a></li>
+              </ul>
             </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-black gradient-text-primary mb-2">2M+</div>
-              <div className="text-gray-300 text-lg">Solutions Submitted</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-black gradient-text-primary mb-2">95%</div>
-              <div className="text-gray-300 text-lg">Interview Success</div>
+            
+            <div>
+              <h4 className="text-white font-semibold mb-4">Company</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">About Us</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Careers</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Contact</a></li>
+                <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Support</a></li>
+              </ul>
             </div>
           </div>
+          
+          <div className="border-t border-gray-700 mt-12 pt-8 text-center">
+            <p className="text-gray-400">
+              &copy; 2025 StackSolve. Built with passion for Indian developers.
+            </p>
+          </div>
         </div>
-      </section>
+      </footer>
     </div>
   );
 };
