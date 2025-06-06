@@ -336,7 +336,10 @@ const ProblemPage = () => {
                     {!isExecuting && <Play className="w-4 h-4" />}
                     Run Code
                   </button>
-                  <button className="btn btn-success gap-2">
+                  <button className="btn btn-success gap-2"
+                    onClick={handleRunCode}
+                    disabled={isExecuting}
+                  >
                     Submit Solution
                   </button>
                 </div>
