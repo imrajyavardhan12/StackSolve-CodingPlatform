@@ -15,6 +15,7 @@ import {
   Users,
   ThumbsUp,
   Home,
+  Send,
 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { useProblemStore } from "../store/useProblemStore";
@@ -41,6 +42,11 @@ const ProblemPage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("javascript");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [testcases, setTestCases] = useState([]);
+  
+  // Separate states for run vs submit
+  const [isRunning, setIsRunning] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [runResults, setRunResults] = useState(null);
 
   const { executeCode, submission, isExecuting } = useExecutionStore();
 
@@ -77,15 +83,62 @@ const ProblemPage = () => {
     setCode(problem.codeSnippets?.[lang] || "");
   };
 
-  const handleRunCode = (e) => {
+  // Run Code - Only test without saving submission
+  const handleRunCode = async (e) => {
     e.preventDefault();
+    setIsRunning(true);
+    setRunResults(null);
+    
+    try {
+      const language_id = getLanguageId(selectedLanguage);
+      const stdin = problem.testcases.map((tc) => tc.input);
+      const expected_outputs = problem.testcases.map((tc) => tc.output);
+      
+      const response = await fetch('/api/v1/execute-code/run', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          source_code: code,
+          language_id,
+          stdin,
+          expected_outputs
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        setRunResults(data);
+      } else {
+        console.error('Run failed:', data.error);
+        // Handle error - maybe show toast
+      }
+    } catch (error) {
+      console.error("Error running code:", error);
+      // Handle error - maybe show toast
+    } finally {
+      setIsRunning(false);
+    }
+  };
+
+  // Submit Solution - Full submission with saving
+  const handleSubmitSolution = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setRunResults(null); // Clear run results when submitting
+    
     try {
       const language_id = getLanguageId(selectedLanguage);
       const stdin = problem.testcases.map((tc) => tc.input);
       const expected_outputs = problem.testcases.map((tc) => tc.output);
       executeCode(code, language_id, stdin, expected_outputs, id);
     } catch (error) {
-      console.log("Error executing code", error);
+      console.log("Error submitting solution", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -192,6 +245,57 @@ const ProblemPage = () => {
       default:
         return null;
     }
+  };
+
+  // Render run results
+  const renderRunResults = () => {
+    if (!runResults) return null;
+
+    return (
+      <div className="card bg-base-100 shadow-xl mt-6">
+        <div className="card-body">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-xl font-bold">Run Results</h3>
+            <div className={`badge ${runResults.allPassed ? 'badge-success' : 'badge-error'} badge-lg`}>
+              {runResults.passedTests}/{runResults.totalTests} Passed
+            </div>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="table table-zebra w-full">
+              <thead>
+                <tr>
+                  <th>Test Case</th>
+                  <th>Status</th>
+                  <th>Input</th>
+                  <th>Expected</th>
+                  <th>Output</th>
+                  <th>Time</th>
+                  <th>Memory</th>
+                </tr>
+              </thead>
+              <tbody>
+                {runResults.results.map((result, index) => (
+                  <tr key={index}>
+                    <td>{result.testCase}</td>
+                    <td>
+                      <div className={`badge ${result.passed ? 'badge-success' : 'badge-error'}`}>
+                        {result.passed ? 'PASS' : 'FAIL'}
+                      </div>
+                    </td>
+                    <td className="font-mono text-sm">{testcases[index]?.input}</td>
+                    <td className="font-mono text-sm">{result.expected}</td>
+                    <td className="font-mono text-sm">{result.stdout || 'No output'}</td>
+                    <td className="text-sm">{result.time || '-'}</td>
+                    <td className="text-sm">{result.memory || '-'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -328,19 +432,23 @@ const ProblemPage = () => {
                 <div className="flex justify-between items-center">
                   <button
                     className={`btn btn-primary gap-2 ${
-                      isExecuting ? "loading" : ""
+                      isRunning ? "loading" : ""
                     }`}
                     onClick={handleRunCode}
-                    disabled={isExecuting}
+                    disabled={isRunning || isExecuting}
                   >
-                    {!isExecuting && <Play className="w-4 h-4" />}
-                    Run Code
+                    {!isRunning && <Play className="w-4 h-4" />}
+                    {isRunning ? "Running..." : "Run Code"}
                   </button>
-                  <button className="btn btn-success gap-2"
-                    onClick={handleRunCode}
-                    disabled={isExecuting}
+                  <button 
+                    className={`btn btn-success gap-2 ${
+                      isExecuting ? "loading" : ""
+                    }`}
+                    onClick={handleSubmitSolution}
+                    disabled={isSubmitting || isExecuting}
                   >
-                    Submit Solution
+                    {!isExecuting && <Send className="w-4 h-4" />}
+                    {isExecuting ? "Submitting..." : "Submit Solution"}
                   </button>
                 </div>
               </div>
@@ -348,37 +456,46 @@ const ProblemPage = () => {
           </div>
         </div>
 
-        <div className="card bg-base-100 shadow-xl mt-6">
-          <div className="card-body">
-            {submission ? (
+        {/* Show Run Results or Submission Results */}
+        {runResults && renderRunResults()}
+        
+        {/* Show Submission Results */}
+        {submission && !runResults && (
+          <div className="card bg-base-100 shadow-xl mt-6">
+            <div className="card-body">
               <Submission submission={submission} />
-            ) : (
-              <>
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-bold">Test Cases</h3>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="table table-zebra w-full">
-                    <thead>
-                      <tr>
-                        <th>Input</th>
-                        <th>Expected Output</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {testcases.map((testCase, index) => (
-                        <tr key={index}>
-                          <td className="font-mono">{testCase.input}</td>
-                          <td className="font-mono">{testCase.output}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
-            )}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Show Test Cases when no results */}
+        {!submission && !runResults && (
+          <div className="card bg-base-100 shadow-xl mt-6">
+            <div className="card-body">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold">Test Cases</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="table table-zebra w-full">
+                  <thead>
+                    <tr>
+                      <th>Input</th>
+                      <th>Expected Output</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {testcases.map((testCase, index) => (
+                      <tr key={index}>
+                        <td className="font-mono">{testCase.input}</td>
+                        <td className="font-mono">{testCase.output}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
