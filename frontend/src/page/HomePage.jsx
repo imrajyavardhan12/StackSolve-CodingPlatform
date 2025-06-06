@@ -32,15 +32,13 @@ const HomePage = () => {
           <div className="hero-content text-center z-10 w-full px-4">
             <div className="max-w-4xl mx-auto">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-black mb-8 leading-tight">
-                <span className="gradient-text">Master Coding</span>
+                <span className="gradient-text">Master DSA for</span>
                 <br />
                 <span className="gradient-text-primary">Interviews</span>
               </h1>
               
               <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-                A Platform Inspired by Leetcode which helps you to prepare for coding
-                interviews and helps you to improve your coding skills by solving coding
-                problems
+                Ace your coding interviews with curated DSA problems, real-time code execution, and comprehensive progress tracking designed for ambitious developers.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-6 justify-center mb-16">
@@ -112,9 +110,9 @@ const HomePage = () => {
         </div>
       </section>
 
-      <section className="py-20 px-8">
+      <section className="py-12 px-8">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
               Featured Problems
             </h2>
