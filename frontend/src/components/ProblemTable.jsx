@@ -102,7 +102,7 @@ const ProblemsTable = ({ problems }) => {
               <span className="text-xs">{difficulty === "ALL" ? "All Difficulties" : difficulty}</span>
               <Filter className="w-3 h-3" />
             </label>
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-xl glass-effect rounded-box w-48 mt-2 z-[9999] border border-primary/20">
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-xl bg-gradient-to-b from-dark-surface to-dark-navy backdrop-blur-md rounded-box w-48 mt-2 z-[9999] border border-primary/30">
               <li><a onClick={() => setDifficulty("ALL")} className="hover:bg-primary/20 text-white text-xs py-2">All Difficulties</a></li>
               {difficulties.map((diff) => (
                 <li key={diff}>
@@ -119,7 +119,7 @@ const ProblemsTable = ({ problems }) => {
               <span className="text-xs">{selectedTag === "ALL" ? "All Tags" : selectedTag}</span>
               <Filter className="w-3 h-3" />
             </label>
-            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-xl glass-effect rounded-box w-48 mt-2 max-h-48 overflow-y-auto z-[9999] border border-primary/20">
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-xl bg-gradient-to-b from-dark-surface to-dark-navy backdrop-blur-md rounded-box w-48 mt-2 max-h-48 overflow-y-auto z-[9999] border border-primary/30">
               <li><a onClick={() => setSelectedTag("ALL")} className="hover:bg-primary/20 text-white text-xs py-2">All Tags</a></li>
               {allTags.map((tag) => (
                 <li key={tag}>
