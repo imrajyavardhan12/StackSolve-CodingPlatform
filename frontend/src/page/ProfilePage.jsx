@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 import { useProfileStore } from '../store/useProfileStore';
 import { useAuthStore } from '../store/useAuthStore';
+import { useNavigate } from 'react-router-dom';
 import StreakCard from '../components/StreakCard';
 import StatisticsOverview from '../components/StatisticsOverview';
 import ProgressBars from '../components/ProgressBars';
-import { Loader, RefreshCw, User, Calendar, Trophy, Code, Zap, Target } from 'lucide-react';
+import { Loader, RefreshCw, User, Calendar, Trophy, Code, Zap, Target, Home } from 'lucide-react';
 import CalendarHeatmap from '../components/CalendarHeatmap';
 
 const ProfilePage = () => {
   const { authUser } = useAuthStore();
   const { dashboardData, isLoading, fetchDashboard, initializeProfile, calendarData, calendarYear, isCalendarLoading, fetchCalendarData, changeCalendarYear } = useProfileStore();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (authUser) {
@@ -89,13 +91,22 @@ const ProfilePage = () => {
                 </p>
               </div>
             </div>
-            <button 
-              className="btn btn-sm glass-effect border-primary/20 text-white hover:bg-primary/20 font-medium"
-              onClick={handleRefresh}
-            >
-              <RefreshCw className="w-4 h-4 mr-2" />
-              Refresh
-            </button>
+            <div className="flex gap-3">
+              <button 
+                className="btn btn-sm glass-effect border-primary/20 text-white hover:bg-primary/20 font-medium"
+                onClick={() => navigate('/')}
+              >
+                <Home className="w-4 h-4 mr-2" />
+                Home
+              </button>
+              <button 
+                className="btn btn-sm glass-effect border-primary/20 text-white hover:bg-primary/20 font-medium"
+                onClick={handleRefresh}
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Refresh
+              </button>
+            </div>
           </div>
 
           {/* Quick Stats Hero Cards */}
