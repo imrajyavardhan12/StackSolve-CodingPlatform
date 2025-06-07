@@ -26,7 +26,8 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${PORT}
       DATABASE_URL: postgresql://stacksolve_user:${DB_PASSWORD}@postgres:5432/stacksolve
       JWT_SECRET: ${JWT_SECRET}
       FRONTEND_URL: ${FRONTEND_URL}
