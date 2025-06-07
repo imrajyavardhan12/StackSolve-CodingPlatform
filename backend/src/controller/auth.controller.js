@@ -38,9 +38,10 @@ export const register = async (req , res)=>{
 
         res.cookie("jwt" , token , {
             httpOnly:true,
-            sameSite:"strict",
-            secure:process.env.NODE_ENV !== "development",
-            maxAge:1000 * 60 * 60 * 24 * 7 // 7 days
+            sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict",
+            secure:process.env.NODE_ENV === "production",
+            maxAge:1000 * 60 * 60 * 24 * 7, // 7 days
+            path: "/"
         })
 
         res.status(201).json({
@@ -93,9 +94,10 @@ export const login = async (req , res)=>{
 
         res.cookie("jwt" , token , {
             httpOnly:true,
-            sameSite:"strict",
-            secure:process.env.NODE_ENV !== "development",
-            maxAge:1000 * 60 * 60 * 24 * 7 // 7 days
+            sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict",
+            secure:process.env.NODE_ENV === "production",
+            maxAge:1000 * 60 * 60 * 24 * 7, // 7 days
+            path: "/"
         })
 
         res.status(200).json({
@@ -124,8 +126,9 @@ export const logout = async (req , res)=>{
     try {
         res.clearCookie("jwt" , {
             httpOnly:true,
-            sameSite:"strict",
-            secure:process.env.NODE_ENV !== "development",
+            sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict",
+            secure:process.env.NODE_ENV === "production",
+            path: "/"
         })
 
         res.status(200).json({
