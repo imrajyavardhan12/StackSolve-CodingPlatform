@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Bookmark, PencilIcon, Trash, TrashIcon, Plus, Search, Filter } from "lucide-react";
 import { useActions } from "../store/useAction";
 import AddToPlaylistModal from "./AddToPlaylist";
@@ -12,6 +12,7 @@ const ProblemsTable = ({ problems }) => {
   const { authUser } = useAuthStore();
   const { onDeleteProblem } = useActions();
   const { createPlaylist } = usePlaylistStore();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("ALL");
   const [selectedTag, setSelectedTag] = useState("ALL");
@@ -53,6 +54,10 @@ const ProblemsTable = ({ problems }) => {
 
   const handleDelete = (id) => {
     onDeleteProblem(id);
+  };
+
+  const handleEdit = (problemId) => {
+    navigate(`/edit-problem/${problemId}`);
   };
 
   const handleCreatePlaylist = async (data) => {
@@ -232,7 +237,10 @@ const ProblemsTable = ({ problems }) => {
                               >
                                 <TrashIcon className="w-3 h-3" />
                               </button>
-                              <button disabled className="btn btn-xs btn-warning">
+                              <button 
+                                onClick={() => handleEdit(problem.id)}
+                                className="btn btn-xs btn-warning"
+                              >
                                 <PencilIcon className="w-3 h-3" />
                               </button>
                             </>
