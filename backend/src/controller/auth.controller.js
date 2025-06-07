@@ -6,14 +6,21 @@ import jwt from "jsonwebtoken";
 const getCookieOptions = () => {
     const isProduction = process.env.NODE_ENV === "production";
     
-    return {
+    // Critical fix for production cookies
+    const options = {
         httpOnly: true,
-        sameSite: isProduction ? "lax" : "strict",
-        secure: isProduction,
+        sameSite: isProduction ? "none" : "lax", // Changed from "lax" to "none" for cross-origin
+        secure: isProduction, // Required when sameSite is "none"
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         path: "/",
-        // Don't set domain - let browser handle it
     };
+    
+    // Add domain if specified in environment
+    if (isProduction && process.env.COOKIE_DOMAIN) {
+        options.domain = process.env.COOKIE_DOMAIN;
+    }
+    
+    return options;
 };
 
 export const register = async (req , res)=>{
@@ -127,7 +134,7 @@ export const logout = async (req , res)=>{
     try {
         res.clearCookie("jwt", {
             httpOnly: true,
-            sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict",
+            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
             secure: process.env.NODE_ENV === "production",
             path: "/"
         });
