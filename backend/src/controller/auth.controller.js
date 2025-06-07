@@ -3,6 +3,19 @@ import {db} from "../libs/db.js"
 import { UserRole } from "../generated/prisma/index.js";
 import jwt from "jsonwebtoken";
 
+const getCookieOptions = () => {
+    const isProduction = process.env.NODE_ENV === "production";
+    
+    return {
+        httpOnly: true,
+        sameSite: isProduction ? "lax" : "strict",
+        secure: isProduction,
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        path: "/",
+        // Don't set domain - let browser handle it
+    };
+};
+
 export const register = async (req , res)=>{
     const {email , password , name} = req.body;
     console.log('inside register route')
@@ -36,13 +49,7 @@ export const register = async (req , res)=>{
             expiresIn:"7d"
         })
 
-        res.cookie("jwt" , token , {
-            httpOnly:true,
-            sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict",
-            secure:process.env.NODE_ENV === "production",
-            maxAge:1000 * 60 * 60 * 24 * 7, // 7 days
-            path: "/"
-        })
+        res.cookie("jwt", token, getCookieOptions());
 
         res.status(201).json({
             success:true,
@@ -92,13 +99,7 @@ export const login = async (req , res)=>{
             expiresIn:"7d"
         })
 
-        res.cookie("jwt" , token , {
-            httpOnly:true,
-            sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict",
-            secure:process.env.NODE_ENV === "production",
-            maxAge:1000 * 60 * 60 * 24 * 7, // 7 days
-            path: "/"
-        })
+        res.cookie("jwt", token, getCookieOptions());
 
         res.status(200).json({
             success:true,
@@ -124,12 +125,12 @@ export const login = async (req , res)=>{
 
 export const logout = async (req , res)=>{
     try {
-        res.clearCookie("jwt" , {
-            httpOnly:true,
+        res.clearCookie("jwt", {
+            httpOnly: true,
             sameSite: process.env.NODE_ENV === "production" ? "lax" : "strict",
-            secure:process.env.NODE_ENV === "production",
+            secure: process.env.NODE_ENV === "production",
             path: "/"
-        })
+        });
 
         res.status(200).json({
             success:true,
