@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
-import { Bookmark, PencilIcon, Trash, TrashIcon, Plus, Search, Filter } from "lucide-react";
+import { Bookmark, PencilIcon, Trash, TrashIcon, Plus, Search, Filter, Sparkles } from "lucide-react";
 import { useActions } from "../store/useAction";
 import AddToPlaylistModal from "./AddToPlaylist";
 import CreatePlaylistModal from "./CreatePlaylistModal";
@@ -167,8 +167,9 @@ const ProblemsTable = ({ problems }) => {
                   const isSolved = problem.solvedBy.some(
                     (user) => user.userId === authUser?.id
                   );
+                  const isDemo = problem.tags?.includes("DEMO");
                   return (
-                    <tr key={problem.id} className="border-b border-primary/10 hover:bg-primary/5 transition-colors">
+                    <tr key={problem.id} className={`border-b border-primary/10 hover:bg-primary/5 transition-colors ${isDemo ? 'bg-gradient-to-r from-purple-900/10 to-pink-900/10' : ''}`}>
                       <td className="py-2">
                         <div className="flex items-center gap-2">
                           <input
@@ -181,13 +182,21 @@ const ProblemsTable = ({ problems }) => {
                         </div>
                       </td>
                       <td className="py-2">
-                        <Link to={`/problem/${problem.id}`} className="font-medium text-white hover:text-primary transition-colors text-sm">
-                          {problem.title}
-                        </Link>
+                        <div className="flex items-center gap-2">
+                          <Link to={`/problem/${problem.id}`} className="font-medium text-white hover:text-primary transition-colors text-sm">
+                            {problem.title}
+                          </Link>
+                          {isDemo && (
+                            <div className="badge badge-xs bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 font-bold animate-pulse">
+                              <Sparkles className="w-3 h-3 mr-1" />
+                              DEMO
+                            </div>
+                          )}
+                        </div>
                       </td>
                       <td className="py-2">
                         <div className="flex flex-wrap gap-1 max-w-xs">
-                          {(problem.tags || []).slice(0, 2).map((tag, idx) => (
+                          {(problem.tags || []).filter(tag => tag !== "DEMO").slice(0, 2).map((tag, idx) => (
                             <span
                               key={idx}
                               className="badge badge-xs badge-outline border-primary/50 text-primary"
@@ -195,9 +204,9 @@ const ProblemsTable = ({ problems }) => {
                               {tag}
                             </span>
                           ))}
-                          {problem.tags && problem.tags.length > 2 && (
+                          {problem.tags && problem.tags.filter(tag => tag !== "DEMO").length > 2 && (
                             <span className="badge badge-xs badge-outline border-gray-500 text-gray-400">
-                              +{problem.tags.length - 2}
+                              +{problem.tags.filter(tag => tag !== "DEMO").length - 2}
                             </span>
                           )}
                         </div>
