@@ -17,7 +17,7 @@ const sleep  = (ms)=> new Promise((resolve)=> setTimeout(resolve , ms))
 export const pollBatchResults = async (tokens)=>{
     while(true){
         
-        const {data} = await axios.get(`${process.env.JUDGE0_API_URL}/submissions/batch`,{
+        const {data} = await axios.get(`${process.env.JUDGE_API_URL}/submissions/batch`,{
             params:{
                 tokens:tokens.join(","),
                 base64_encoded:false,
@@ -40,7 +40,7 @@ export const pollBatchResults = async (tokens)=>{
 }
 
 export const submitBatch = async (submissions)=>{
-    const {data} = await axios.post(`${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`,{
+    const {data} = await axios.post(`${process.env.JUDGE_API_URL}/submissions/batch?base64_encoded=false`,{
         submissions
     },
         {
