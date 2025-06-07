@@ -19,11 +19,19 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use(cors({
-    origin : process.env.BASE_URL,
-    methods : ['GET','POST','DELETE','OPTIONS'],
+    origin : process.env.FRONTEND_URL || 'http://localhost:3000',
+    methods : ['GET','POST','PUT','DELETE','OPTIONS'],
     allowedHeaders : ['Content-Type','Authorization'],
     credentials : true
 }))
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+    res.status(200).json({ 
+        status: 'OK',
+        message: 'Backend is running'
+    })
+})
 
 app.get('/',(req,res)=>{
     res.send('hey there its working ')
