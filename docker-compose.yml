@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: stacksolve
+      POSTGRES_USER: stacksolve_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - stacksolve-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stacksolve_user -d stacksolve"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://stacksolve_user:${DB_PASSWORD}@postgres:5432/stacksolve
+      JWT_SECRET: ${JWT_SECRET}
+      FRONTEND_URL: ${FRONTEND_URL}
+      DOMAIN_URL: ${DOMAIN_URL}
+      JUDGE_API_URL: ${JUDGE_API_URL}
+      SULU_API_KEY: ${SULU_API_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+    networks:
+      - stacksolve-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - stacksolve-network
+
+volumes:
+  postgres_data:
+
+networks:
+  stacksolve-network:
+    driver: bridge
