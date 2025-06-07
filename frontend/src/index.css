@@ -10,6 +10,14 @@
   --text-secondary: #8B8B8D;
 }
 
+/* Global background */
+html, body {
+  background: linear-gradient(135deg, var(--dark-navy) 0%, var(--dark-surface) 100%);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
 /* Gradient Backgrounds */
 .gradient-bg {
   background: linear-gradient(135deg, var(--dark-navy) 0%, var(--dark-surface) 100%);
