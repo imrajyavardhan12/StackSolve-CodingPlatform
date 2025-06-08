@@ -51,11 +51,23 @@ const ProblemPage = () => {
     getSubmissionCountForProblem(id);
   }, [id]);
 
+  // Handle initial problem load and set default language
   useEffect(() => {
-    if (problem) {
-      setCode(
-        problem.codeSnippets?.[selectedLanguage] || submission?.sourceCode || ""
-      );
+    if (problem && problem.codeSnippets) {
+      // Get available languages
+      const availableLanguages = Object.keys(problem.codeSnippets);
+      
+      // If current selected language doesn't have a code snippet, use the first available language
+      if (!problem.codeSnippets[selectedLanguage] && availableLanguages.length > 0) {
+        const firstAvailableLanguage = availableLanguages[0];
+        setSelectedLanguage(firstAvailableLanguage);
+        setCode(problem.codeSnippets[firstAvailableLanguage] || "");
+      } else {
+        // Set code for the selected language
+        setCode(problem.codeSnippets[selectedLanguage] || submission?.sourceCode || "");
+      }
+      
+      // Set test cases
       setTestCases(
         problem.testcases?.map((tc) => ({
           input: tc.input,
@@ -63,7 +75,14 @@ const ProblemPage = () => {
         })) || []
       );
     }
-  }, [problem, selectedLanguage]);
+  }, [problem]);
+
+  // Handle language change
+  useEffect(() => {
+    if (problem && problem.codeSnippets && problem.codeSnippets[selectedLanguage]) {
+      setCode(problem.codeSnippets[selectedLanguage]);
+    }
+  }, [selectedLanguage]);
 
   useEffect(() => {
     if (activeTab === "submissions" && id) {
@@ -74,7 +93,6 @@ const ProblemPage = () => {
   const handleLanguageChange = (e) => {
     const lang = e.target.value;
     setSelectedLanguage(lang);
-    setCode(problem.codeSnippets?.[lang] || "");
   };
 
   const handleRunCode = async (e) => {
