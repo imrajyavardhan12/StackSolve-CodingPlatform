@@ -1,30 +1,59 @@
 import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
-import { Bookmark, PencilIcon, Trash, TrashIcon, Plus, Search, Filter, Sparkles } from "lucide-react";
+import { Bookmark, PencilIcon, Trash, TrashIcon, Plus, Search, Filter, Sparkles, Building } from "lucide-react";
 import { useActions } from "../store/useAction";
 import AddToPlaylistModal from "./AddToPlaylist";
 import CreatePlaylistModal from "./CreatePlaylistModal";
+import EditProblemModal from "./EditProblemModal";
 import { usePlaylistStore } from "../store/usePlaylistStore";
+import { useProblemStore } from "../store/useProblemStore";
 
+// Common company tags list
+const COMPANY_LIST = [
+  "Google", "Amazon", "Microsoft", "Meta", "Apple", 
+  "Netflix", "Adobe", "Uber", "LinkedIn", "Twitter",
+  "Oracle", "Goldman Sachs", "JPMorgan", "Bloomberg",
+  "Salesforce", "PayPal", "Spotify", "Airbnb", "Tesla"
+];
 
 const ProblemsTable = ({ problems }) => {
   const { authUser } = useAuthStore();
-  const { onDeleteProblem } = useActions();
+  const { onDeleteProblem, onUpdateProblem } = useActions();
   const { createPlaylist } = usePlaylistStore();
+  const { getAllProblems } = useProblemStore();
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("ALL");
   const [selectedTag, setSelectedTag] = useState("ALL");
+  const [selectedCompany, setSelectedCompany] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
+  const [editingProblem, setEditingProblem] = useState(null);
 
   const allTags = useMemo(() => {
     if (!Array.isArray(problems)) return [];
     const tagsSet = new Set();
-    problems.forEach((p) => p.tags?.forEach((t) => tagsSet.add(t)));
+    problems.forEach((p) => p.tags?.forEach((t) => {
+      // Exclude company names from topic tags
+      if (!COMPANY_LIST.includes(t)) {
+        tagsSet.add(t);
+      }
+    }));
     return Array.from(tagsSet);
+  }, [problems]);
+
+  const allCompanies = useMemo(() => {
+    if (!Array.isArray(problems)) return [];
+    const companiesSet = new Set();
+    problems.forEach((p) => p.tags?.forEach((t) => {
+      if (COMPANY_LIST.includes(t)) {
+        companiesSet.add(t);
+      }
+    }));
+    return Array.from(companiesSet);
   }, [problems]);
 
   const difficulties = ["EASY", "MEDIUM", "HARD"];
@@ -39,8 +68,11 @@ const ProblemsTable = ({ problems }) => {
       )
       .filter((problem) =>
         selectedTag === "ALL" ? true : problem.tags?.includes(selectedTag)
+      )
+      .filter((problem) =>
+        selectedCompany === "ALL" ? true : problem.tags?.includes(selectedCompany)
       );
-  }, [problems, search, difficulty, selectedTag]);
+  }, [problems, search, difficulty, selectedTag, selectedCompany]);
 
   const itemsPerPage = 8;
   const totalPages = Math.ceil(filteredProblems.length / itemsPerPage);
@@ -64,6 +96,17 @@ const ProblemsTable = ({ problems }) => {
     setIsAddToPlaylistModalOpen(true);
   };
 
+  const handleEditProblem = (problem) => {
+    setEditingProblem(problem);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateProblem = async (updatedProblem) => {
+    await onUpdateProblem(updatedProblem.id, updatedProblem);
+    await getAllProblems(); // Refresh the problems list
+    setIsEditModalOpen(false);
+  };
+
   return (
     <div className="w-full relative">
       <div className="flex justify-between items-center mb-6">
@@ -81,7 +124,7 @@ const ProblemsTable = ({ problems }) => {
       </div>
 
       <div className="glass-effect rounded-xl p-4 mb-6 relative z-30">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
@@ -122,6 +165,36 @@ const ProblemsTable = ({ problems }) => {
           
           <div className="dropdown dropdown-bottom dropdown-end">
             <label tabIndex={0} className="btn btn-sm glass-effect border-primary/20 w-full justify-between text-white">
+              <span className="text-xs flex items-center gap-1">
+                <Building className="w-3 h-3" />
+                {selectedCompany === "ALL" ? "All Companies" : selectedCompany}
+              </span>
+              <Filter className="w-3 h-3" />
+            </label>
+            <ul tabIndex={0} className="dropdown-content menu p-2 shadow-2xl backdrop-blur-xl bg-[#1A1B23]/95 rounded-box w-48 mt-2 max-h-48 overflow-y-auto z-[9999] border border-primary/40">
+              <li>
+                <a 
+                  onClick={() => setSelectedCompany("ALL")} 
+                  className="hover:bg-primary/30 text-white text-xs py-2 px-3 rounded-lg transition-all duration-200 hover:text-white font-medium"
+                >
+                  All Companies
+                </a>
+              </li>
+              {allCompanies.map((company) => (
+                <li key={company}>
+                  <a 
+                    onClick={() => setSelectedCompany(company)} 
+                    className="hover:bg-primary/30 text-white text-xs py-2 px-3 rounded-lg transition-all duration-200 hover:text-white font-medium"
+                  >
+                    {company}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="dropdown dropdown-bottom dropdown-end">
+            <label tabIndex={0} className="btn btn-sm glass-effect border-primary/20 w-full justify-between text-white">
               <span className="text-xs">{selectedTag === "ALL" ? "All Tags" : selectedTag}</span>
               <Filter className="w-3 h-3" />
             </label>
@@ -156,6 +229,7 @@ const ProblemsTable = ({ problems }) => {
               <tr className="border-b border-primary/20">
                 <th className="text-white font-semibold text-xs">Status</th>
                 <th className="text-white font-semibold text-xs">Title</th>
+                <th className="text-white font-semibold text-xs">Company</th>
                 <th className="text-white font-semibold text-xs">Tags</th>
                 <th className="text-white font-semibold text-xs">Difficulty</th>
                 <th className="text-white font-semibold text-xs">Actions</th>
@@ -168,6 +242,9 @@ const ProblemsTable = ({ problems }) => {
                     (user) => user.userId === authUser?.id
                   );
                   const isDemo = problem.tags?.includes("DEMO");
+                  const companyTags = problem.tags?.filter(tag => COMPANY_LIST.includes(tag)) || [];
+                  const topicTags = problem.tags?.filter(tag => !COMPANY_LIST.includes(tag) && tag !== "DEMO") || [];
+                  
                   return (
                     <tr key={problem.id} className={`border-b border-primary/10 hover:bg-primary/5 transition-colors ${isDemo ? 'bg-gradient-to-r from-purple-900/10 to-pink-900/10' : ''}`}>
                       <td className="py-2">
@@ -195,8 +272,25 @@ const ProblemsTable = ({ problems }) => {
                         </div>
                       </td>
                       <td className="py-2">
+                        <div className="flex flex-wrap gap-1">
+                          {companyTags.slice(0, 2).map((company, idx) => (
+                            <span
+                              key={idx}
+                              className="badge badge-xs badge-primary text-white"
+                            >
+                              {company}
+                            </span>
+                          ))}
+                          {companyTags.length > 2 && (
+                            <span className="badge badge-xs badge-outline border-gray-500 text-gray-400">
+                              +{companyTags.length - 2}
+                            </span>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-2">
                         <div className="flex flex-wrap gap-1 max-w-xs">
-                          {(problem.tags || []).filter(tag => tag !== "DEMO").slice(0, 2).map((tag, idx) => (
+                          {topicTags.slice(0, 2).map((tag, idx) => (
                             <span
                               key={idx}
                               className="badge badge-xs badge-outline border-primary/50 text-primary"
@@ -204,9 +298,9 @@ const ProblemsTable = ({ problems }) => {
                               {tag}
                             </span>
                           ))}
-                          {problem.tags && problem.tags.filter(tag => tag !== "DEMO").length > 2 && (
+                          {topicTags.length > 2 && (
                             <span className="badge badge-xs badge-outline border-gray-500 text-gray-400">
-                              +{problem.tags.filter(tag => tag !== "DEMO").length - 2}
+                              +{topicTags.length - 2}
                             </span>
                           )}
                         </div>
@@ -241,7 +335,10 @@ const ProblemsTable = ({ problems }) => {
                               >
                                 <TrashIcon className="w-3 h-3" />
                               </button>
-                              <button disabled className="btn btn-xs btn-warning">
+                              <button 
+                                onClick={() => handleEditProblem(problem)}
+                                className="btn btn-xs btn-warning"
+                              >
                                 <PencilIcon className="w-3 h-3" />
                               </button>
                             </>
@@ -253,7 +350,7 @@ const ProblemsTable = ({ problems }) => {
                 })
               ) : (
                 <tr>
-                  <td colSpan={5} className="text-center py-8">
+                  <td colSpan={6} className="text-center py-8">
                     <div className="text-gray-400">
                       <div className="text-lg mb-1">No problems found</div>
                       <div className="text-xs">Try adjusting your search criteria or filters</div>
@@ -302,8 +399,7 @@ const ProblemsTable = ({ problems }) => {
                   {page}
                 </button>
               );
-            })}
-          </div>
+            })}</div>
           
           <button
             className="btn btn-xs glass-effect border-primary/20 text-white hover:bg-primary/20 disabled:opacity-50"
@@ -325,6 +421,13 @@ const ProblemsTable = ({ problems }) => {
         isOpen={isAddToPlaylistModalOpen}
         onClose={() => setIsAddToPlaylistModalOpen(false)}
         problemId={selectedProblemId}
+      />
+
+      <EditProblemModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        problem={editingProblem}
+        onSave={handleUpdateProblem}
       />
     </div>
   );
