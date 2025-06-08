@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { useProfileStore } from '../store/useProfileStore';
 import { useAuthStore } from '../store/useAuthStore';
 import { usePlaylistStore } from '../store/usePlaylistStore';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import StreakCard from '../components/StreakCard';
 import StatisticsOverview from '../components/StatisticsOverview';
 import ProgressBars from '../components/ProgressBars';
-import { Loader, RefreshCw, User, Calendar, Trophy, Code, Zap, Target, Home, Bookmark, Trash2, ExternalLink, Plus } from 'lucide-react';
+import { Loader, RefreshCw, User, Calendar, Trophy, Code, Zap, Target, Home, Bookmark, Trash2, Plus, List } from 'lucide-react';
 import CalendarHeatmap from '../components/CalendarHeatmap';
 
 const ProfilePage = () => {
@@ -197,35 +197,47 @@ const ProfilePage = () => {
               {playlists.map((playlist) => (
                 <div key={playlist.id} className="glass-effect rounded-2xl p-6 hover:bg-primary/5 transition-all duration-300">
                   <div className="flex justify-between items-start mb-4">
-                    <div>
+                    <div className="flex-1">
                       <h3 className="text-lg font-bold text-white mb-1">{playlist.name}</h3>
                       {playlist.description && (
                         <p className="text-sm text-gray-400 line-clamp-2">{playlist.description}</p>
                       )}
                     </div>
-                    <div className="flex gap-2">
-                      <Link
-                        to={`/playlist/${playlist.id}`}
-                        className="btn btn-sm btn-circle glass-effect border-primary/20 text-primary hover:bg-primary/20"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </Link>
-                      <button
-                        onClick={() => handleDeletePlaylist(playlist.id)}
-                        className="btn btn-sm btn-circle glass-effect border-red-500/20 text-red-500 hover:bg-red-500/20"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => handleDeletePlaylist(playlist.id)}
+                      className="btn btn-sm btn-circle glass-effect border-red-500/20 text-red-500 hover:bg-red-500/20 ml-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-400">
-                      {playlist.problems?.length || 0} problems
-                    </span>
+                  <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <List className="w-4 h-4 text-primary" />
+                      <span className="text-gray-400">
+                        {playlist.problems?.length || 0} problems
+                      </span>
+                    </div>
                     <span className="text-gray-400">
                       Created {new Date(playlist.createdAt).toLocaleDateString()}
                     </span>
                   </div>
+                  {playlist.problems && playlist.problems.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-primary/20">
+                      <p className="text-xs text-gray-500 mb-2">Recent problems:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {playlist.problems.slice(0, 3).map((problem, idx) => (
+                          <span key={idx} className="badge badge-xs badge-outline border-primary/50 text-primary">
+                            {problem.title}
+                          </span>
+                        ))}
+                        {playlist.problems.length > 3 && (
+                          <span className="badge badge-xs badge-outline border-gray-500 text-gray-400">
+                            +{playlist.problems.length - 3} more
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
