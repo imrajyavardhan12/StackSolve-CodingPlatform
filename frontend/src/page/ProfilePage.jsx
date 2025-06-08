@@ -1,24 +1,27 @@
 import React, { useEffect } from 'react';
 import { useProfileStore } from '../store/useProfileStore';
 import { useAuthStore } from '../store/useAuthStore';
-import { useNavigate } from 'react-router-dom';
+import { usePlaylistStore } from '../store/usePlaylistStore';
+import { useNavigate, Link } from 'react-router-dom';
 import StreakCard from '../components/StreakCard';
 import StatisticsOverview from '../components/StatisticsOverview';
 import ProgressBars from '../components/ProgressBars';
-import { Loader, RefreshCw, User, Calendar, Trophy, Code, Zap, Target, Home } from 'lucide-react';
+import { Loader, RefreshCw, User, Calendar, Trophy, Code, Zap, Target, Home, Bookmark, Trash2, ExternalLink, Plus } from 'lucide-react';
 import CalendarHeatmap from '../components/CalendarHeatmap';
 
 const ProfilePage = () => {
   const { authUser } = useAuthStore();
   const { dashboardData, isLoading, fetchDashboard, initializeProfile, calendarData, calendarYear, isCalendarLoading, fetchCalendarData, changeCalendarYear } = useProfileStore();
+  const { playlists, getAllPlaylists, deletePlaylist, isLoading: isPlaylistLoading } = usePlaylistStore();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (authUser) {
       fetchDashboard();
       fetchCalendarData();
+      getAllPlaylists();
     }
-  }, [authUser, fetchDashboard, fetchCalendarData]);
+  }, [authUser, fetchDashboard, fetchCalendarData, getAllPlaylists]);
 
   const handleInitializeProfile = async () => {
     await initializeProfile();
@@ -27,6 +30,13 @@ const ProfilePage = () => {
   const handleRefresh = () => {
     fetchDashboard();
     fetchCalendarData(calendarYear);
+    getAllPlaylists();
+  };
+
+  const handleDeletePlaylist = async (playlistId) => {
+    if (window.confirm('Are you sure you want to delete this playlist?')) {
+      await deletePlaylist(playlistId);
+    }
   };
 
   if (isLoading) {
@@ -167,6 +177,71 @@ const ProfilePage = () => {
             statistics={dashboardData.statistics} 
             progress={dashboardData.progress} 
           />
+        </div>
+
+        {/* Playlists Section */}
+        <div className="mb-8">
+          <h2 className="text-xl font-bold gradient-text mb-5 flex items-center gap-3">
+            <Bookmark className="w-5 h-5" />
+            My Playlists
+          </h2>
+          {isPlaylistLoading ? (
+            <div className="glass-effect rounded-2xl p-8">
+              <div className="flex items-center justify-center py-8">
+                <Loader className="w-5 h-5 animate-spin mr-3 text-primary" />
+                <span className="text-white font-medium text-sm">Loading playlists...</span>
+              </div>
+            </div>
+          ) : playlists && playlists.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {playlists.map((playlist) => (
+                <div key={playlist.id} className="glass-effect rounded-2xl p-6 hover:bg-primary/5 transition-all duration-300">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="text-lg font-bold text-white mb-1">{playlist.name}</h3>
+                      {playlist.description && (
+                        <p className="text-sm text-gray-400 line-clamp-2">{playlist.description}</p>
+                      )}
+                    </div>
+                    <div className="flex gap-2">
+                      <Link
+                        to={`/playlist/${playlist.id}`}
+                        className="btn btn-sm btn-circle glass-effect border-primary/20 text-primary hover:bg-primary/20"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </Link>
+                      <button
+                        onClick={() => handleDeletePlaylist(playlist.id)}
+                        className="btn btn-sm btn-circle glass-effect border-red-500/20 text-red-500 hover:bg-red-500/20"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-400">
+                      {playlist.problems?.length || 0} problems
+                    </span>
+                    <span className="text-gray-400">
+                      Created {new Date(playlist.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="glass-effect rounded-2xl p-8 text-center">
+              <Bookmark className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+              <p className="text-gray-400 mb-4">You haven't created any playlists yet.</p>
+              <button
+                onClick={() => navigate('/')}
+                className="btn btn-sm bg-gradient-to-r from-primary to-secondary text-dark-navy border-0 hover-glow font-semibold"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Create Your First Playlist
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Calendar Heatmap */}
