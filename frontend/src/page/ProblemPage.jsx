@@ -137,10 +137,10 @@ const ProblemPage = () => {
 
   if (isProblemLoading || !problem) {
     return (
-      <div className="flex items-center justify-center h-screen bg-base-200">
-        <div className="card bg-base-100 p-8 shadow-xl">
+      <div className="flex items-center justify-center h-screen bg-[#0a0b0d]">
+        <div className="card glass-effect p-8">
           <span className="loading loading-spinner loading-lg text-primary"></span>
-          <p className="mt-4 text-base-content/70">Loading problem...</p>
+          <p className="mt-4 text-gray-400">Loading problem...</p>
         </div>
       </div>
     );
@@ -150,40 +150,40 @@ const ProblemPage = () => {
     switch (activeTab) {
       case "description":
         return (
-          <div className="prose max-w-none">
-            <p className="text-lg mb-6">{problem.description}</p>
+          <div className="text-gray-300">
+            <p className="text-base mb-6 leading-relaxed">{problem.description}</p>
 
             {problem.examples && (
               <>
-                <h3 className="text-xl font-bold mb-4">Examples:</h3>
+                <h3 className="text-lg font-bold mb-4 gradient-text">Examples:</h3>
                 {Object.entries(problem.examples).map(
                   ([lang, example], idx) => (
                     <div
                       key={lang}
-                      className="bg-base-200 p-6 rounded-xl mb-6 font-mono"
+                      className="glass-effect p-5 rounded-xl mb-4 border border-primary/20"
                     >
-                      <div className="mb-4">
-                        <div className="text-indigo-300 mb-2 text-base font-semibold">
+                      <div className="mb-3">
+                        <div className="text-primary mb-2 text-sm font-semibold">
                           Input:
                         </div>
-                        <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white">
+                        <code className="bg-black/50 px-3 py-1 rounded text-sm text-gray-200">
                           {example.input}
-                        </span>
+                        </code>
                       </div>
-                      <div className="mb-4">
-                        <div className="text-indigo-300 mb-2 text-base font-semibold">
+                      <div className="mb-3">
+                        <div className="text-primary mb-2 text-sm font-semibold">
                           Output:
                         </div>
-                        <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white">
+                        <code className="bg-black/50 px-3 py-1 rounded text-sm text-gray-200">
                           {example.output}
-                        </span>
+                        </code>
                       </div>
                       {example.explanation && (
                         <div>
-                          <div className="text-emerald-300 mb-2 text-base font-semibold">
+                          <div className="text-primary mb-2 text-sm font-semibold">
                             Explanation:
                           </div>
-                          <p className="text-base-content/70 text-lg font-sem">
+                          <p className="text-gray-400 text-sm">
                             {example.explanation}
                           </p>
                         </div>
@@ -196,11 +196,11 @@ const ProblemPage = () => {
 
             {problem.constraints && (
               <>
-                <h3 className="text-xl font-bold mb-4">Constraints:</h3>
-                <div className="bg-base-200 p-6 rounded-xl mb-6">
-                  <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white text-lg">
+                <h3 className="text-lg font-bold mb-4 gradient-text">Constraints:</h3>
+                <div className="glass-effect p-5 rounded-xl border border-primary/20">
+                  <code className="text-sm text-gray-200">
                     {problem.constraints}
-                  </span>
+                  </code>
                 </div>
               </>
             )}
@@ -215,7 +215,7 @@ const ProblemPage = () => {
         );
       case "discussion":
         return (
-          <div className="p-4 text-center text-base-content/70">
+          <div className="p-4 text-center text-gray-400">
             No discussions yet
           </div>
         );
@@ -223,13 +223,13 @@ const ProblemPage = () => {
         return (
           <div className="p-4">
             {problem?.hints ? (
-              <div className="bg-base-200 p-6 rounded-xl">
-                <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white text-lg">
+              <div className="glass-effect p-5 rounded-xl border border-primary/20">
+                <p className="text-gray-300">
                   {problem.hints}
-                </span>
+                </p>
               </div>
             ) : (
-              <div className="text-center text-base-content/70">
+              <div className="text-center text-gray-400">
                 No hints available
               </div>
             )}
@@ -244,42 +244,42 @@ const ProblemPage = () => {
     if (!runResults) return null;
 
     return (
-      <div className="card bg-base-100 shadow-xl mt-6">
-        <div className="card-body">
+      <div className="glass-effect rounded-xl mt-6 border border-primary/20">
+        <div className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold">Run Results</h3>
+            <h3 className="text-xl font-bold gradient-text">Run Results</h3>
             <div className={`badge ${runResults.allPassed ? 'badge-success' : 'badge-error'} badge-lg`}>
               {runResults.passedTests}/{runResults.totalTests} Passed
             </div>
           </div>
           
           <div className="overflow-x-auto">
-            <table className="table table-zebra w-full">
+            <table className="table table-sm w-full">
               <thead>
-                <tr>
-                  <th>Test Case</th>
-                  <th>Status</th>
-                  <th>Input</th>
-                  <th>Expected</th>
-                  <th>Output</th>
-                  <th>Time</th>
-                  <th>Memory</th>
+                <tr className="border-b border-primary/20">
+                  <th className="text-gray-400">Test Case</th>
+                  <th className="text-gray-400">Status</th>
+                  <th className="text-gray-400">Input</th>
+                  <th className="text-gray-400">Expected</th>
+                  <th className="text-gray-400">Output</th>
+                  <th className="text-gray-400">Time</th>
+                  <th className="text-gray-400">Memory</th>
                 </tr>
               </thead>
               <tbody>
                 {runResults.results.map((result, index) => (
-                  <tr key={index}>
-                    <td>{result.testCase}</td>
+                  <tr key={index} className="border-b border-primary/10">
+                    <td className="text-gray-300">{result.testCase}</td>
                     <td>
-                      <div className={`badge ${result.passed ? 'badge-success' : 'badge-error'}`}>
+                      <div className={`badge badge-sm ${result.passed ? 'badge-success' : 'badge-error'}`}>
                         {result.passed ? 'PASS' : 'FAIL'}
                       </div>
                     </td>
-                    <td className="font-mono text-sm">{testcases[index]?.input}</td>
-                    <td className="font-mono text-sm">{result.expected}</td>
-                    <td className="font-mono text-sm">{result.stdout || 'No output'}</td>
-                    <td className="text-sm">{result.time || '-'}</td>
-                    <td className="text-sm">{result.memory || '-'}</td>
+                    <td className="font-mono text-xs text-gray-300">{testcases[index]?.input}</td>
+                    <td className="font-mono text-xs text-gray-300">{result.expected}</td>
+                    <td className="font-mono text-xs text-gray-300">{result.stdout || 'No output'}</td>
+                    <td className="text-xs text-gray-300">{result.time || '-'}</td>
+                    <td className="text-xs text-gray-300">{result.memory || '-'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -291,48 +291,48 @@ const ProblemPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-base-300 to-base-200 max-w-7xl w-full">
-      <nav className="navbar bg-base-100 shadow-lg px-4">
+    <div className="min-h-screen bg-[#0a0b0d]">
+      <nav className="navbar glass-effect px-6 border-b border-primary/20">
         <div className="flex-1 gap-2">
-          <Link to={"/"} className="flex items-center gap-2 text-primary">
-            <Home className="w-6 h-6" />
-            <ChevronRight className="w-4 h-4" />
+          <Link to={"/"} className="btn btn-ghost btn-sm gap-2 text-primary">
+            <Home className="w-5 h-5" />
+            <span className="text-gray-400">Home</span>
           </Link>
-          <div className="mt-2">
-            <h1 className="text-xl font-bold">{problem.title}</h1>
-            <div className="flex items-center gap-2 text-sm text-base-content/70 mt-5">
-              <Clock className="w-4 h-4" />
-              <span>
-                Updated{" "}
-                {new Date(problem.createdAt).toLocaleString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
+          <ChevronRight className="w-4 h-4 text-gray-500" />
+          <div>
+            <h1 className="text-xl font-bold text-white">{problem.title}</h1>
+            <div className="flex items-center gap-3 text-xs text-gray-400 mt-1">
+              <span className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                {new Date(problem.createdAt).toLocaleDateString()}
               </span>
-              <span className="text-base-content/30">•</span>
-              <Users className="w-4 h-4" />
-              <span>{submissionCount} Submissions</span>
-              <span className="text-base-content/30">•</span>
-              <ThumbsUp className="w-4 h-4" />
-              <span>95% Success Rate</span>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <Users className="w-3 h-3" />
+                {submissionCount} Submissions
+              </span>
+              <span>•</span>
+              <span className="flex items-center gap-1">
+                <ThumbsUp className="w-3 h-3" />
+                95% Success
+              </span>
             </div>
           </div>
         </div>
-        <div className="flex-none gap-4">
+        <div className="flex-none gap-3">
           <button
-            className={`btn btn-ghost btn-circle ${
-              isBookmarked ? "text-primary" : ""
+            className={`btn btn-ghost btn-sm btn-circle ${
+              isBookmarked ? "text-primary" : "text-gray-400"
             }`}
             onClick={() => setIsBookmarked(!isBookmarked)}
           >
             <Bookmark className="w-5 h-5" />
           </button>
-          <button className="btn btn-ghost btn-circle">
+          <button className="btn btn-ghost btn-sm btn-circle text-gray-400">
             <Share2 className="w-5 h-5" />
           </button>
           <select
-            className="select select-bordered select-primary w-40"
+            className="select select-sm glass-effect border-primary/20 text-white"
             value={selectedLanguage}
             onChange={handleLanguageChange}
           >
@@ -345,138 +345,149 @@ const ProblemPage = () => {
         </div>
       </nav>
 
-      <div className="container mx-auto p-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body p-0">
-              <div className="tabs tabs-bordered">
-                <button
-                  className={`tab gap-2 ${
-                    activeTab === "description" ? "tab-active" : ""
-                  }`}
-                  onClick={() => setActiveTab("description")}
-                >
-                  <FileText className="w-4 h-4" />
-                  Description
-                </button>
-                <button
-                  className={`tab gap-2 ${
-                    activeTab === "submissions" ? "tab-active" : ""
-                  }`}
-                  onClick={() => setActiveTab("submissions")}
-                >
-                  <Code2 className="w-4 h-4" />
-                  Submissions
-                </button>
-                <button
-                  className={`tab gap-2 ${
-                    activeTab === "discussion" ? "tab-active" : ""
-                  }`}
-                  onClick={() => setActiveTab("discussion")}
-                >
-                  <MessageSquare className="w-4 h-4" />
-                  Discussion
-                </button>
-                <button
-                  className={`tab gap-2 ${
-                    activeTab === "hints" ? "tab-active" : ""
-                  }`}
-                  onClick={() => setActiveTab("hints")}
-                >
-                  <Lightbulb className="w-4 h-4" />
-                  Hints
-                </button>
-              </div>
+      <div className="container mx-auto p-6 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          {/* Left Panel - Description */}
+          <div className="lg:col-span-2 glass-effect rounded-xl overflow-hidden border border-primary/20">
+            <div className="tabs tabs-boxed bg-transparent p-2">
+              <button
+                className={`tab text-xs ${
+                  activeTab === "description" 
+                    ? "bg-primary text-dark-navy font-semibold" 
+                    : "text-gray-400 hover:text-white"
+                }`}
+                onClick={() => setActiveTab("description")}
+              >
+                <FileText className="w-4 h-4 mr-1" />
+                Description
+              </button>
+              <button
+                className={`tab text-xs ${
+                  activeTab === "submissions" 
+                    ? "bg-primary text-dark-navy font-semibold" 
+                    : "text-gray-400 hover:text-white"
+                }`}
+                onClick={() => setActiveTab("submissions")}
+              >
+                <Code2 className="w-4 h-4 mr-1" />
+                Submissions
+              </button>
+              <button
+                className={`tab text-xs ${
+                  activeTab === "discussion" 
+                    ? "bg-primary text-dark-navy font-semibold" 
+                    : "text-gray-400 hover:text-white"
+                }`}
+                onClick={() => setActiveTab("discussion")}
+              >
+                <MessageSquare className="w-4 h-4 mr-1" />
+                Discussion
+              </button>
+              <button
+                className={`tab text-xs ${
+                  activeTab === "hints" 
+                    ? "bg-primary text-dark-navy font-semibold" 
+                    : "text-gray-400 hover:text-white"
+                }`}
+                onClick={() => setActiveTab("hints")}
+              >
+                <Lightbulb className="w-4 h-4 mr-1" />
+                Hints
+              </button>
+            </div>
 
-              <div className="p-6">{renderTabContent()}</div>
+            <div className="p-6 max-h-[calc(100vh-250px)] overflow-y-auto">
+              {renderTabContent()}
             </div>
           </div>
 
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body p-0">
-              <div className="tabs tabs-bordered">
-                <button className="tab tab-active gap-2">
-                  <Terminal className="w-4 h-4" />
-                  Code Editor
+          {/* Right Panel - Code Editor */}
+          <div className="lg:col-span-3 glass-effect rounded-xl overflow-hidden border border-primary/20">
+            <div className="bg-gradient-to-r from-primary/10 to-secondary/10 px-4 py-3 border-b border-primary/20">
+              <div className="flex items-center gap-2">
+                <Terminal className="w-5 h-5 text-primary" />
+                <span className="font-semibold text-white">Code Editor</span>
+              </div>
+            </div>
+
+            <div className="h-[calc(100vh-350px)] min-h-[500px]">
+              <Editor
+                height="100%"
+                language={selectedLanguage.toLowerCase()}
+                theme="vs-dark"
+                value={code}
+                onChange={(value) => setCode(value || "")}
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 16,
+                  lineNumbers: "on",
+                  roundedSelection: false,
+                  scrollBeyondLastLine: false,
+                  readOnly: false,
+                  automaticLayout: true,
+                  fontFamily: "'Fira Code', 'Courier New', monospace",
+                  padding: { top: 16, bottom: 16 },
+                }}
+              />
+            </div>
+
+            <div className="p-4 border-t border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5">
+              <div className="flex justify-between items-center">
+                <button
+                  className={`btn btn-sm bg-gradient-to-r from-primary to-secondary text-dark-navy border-0 hover-glow font-semibold gap-2 ${
+                    isExecuting ? "loading" : ""
+                  }`}
+                  onClick={handleRunCode}
+                  disabled={isExecuting}
+                >
+                  {!isExecuting && <Play className="w-4 h-4" />}
+                  {isExecuting ? "Running..." : "Run Code"}
                 </button>
-              </div>
-
-              <div className="h-[600px] w-full">
-                <Editor
-                  height="100%"
-                  language={selectedLanguage.toLowerCase()}
-                  theme="vs-dark"
-                  value={code}
-                  onChange={(value) => setCode(value || "")}
-                  options={{
-                    minimap: { enabled: false },
-                    fontSize: 20,
-                    lineNumbers: "on",
-                    roundedSelection: false,
-                    scrollBeyondLastLine: false,
-                    readOnly: false,
-                    automaticLayout: true,
-                  }}
-                />
-              </div>
-
-              <div className="p-4 border-t border-base-300 bg-base-200">
-                <div className="flex justify-between items-center">
-                  <button
-                    className={`btn btn-primary gap-2 ${
-                      isExecuting ? "loading" : ""
-                    }`}
-                    onClick={handleRunCode}
-                    disabled={isExecuting}
-                  >
-                    {!isExecuting && <Play className="w-4 h-4" />}
-                    {isExecuting ? "Running..." : "Run Code"}
-                  </button>
-                  <button 
-                    className={`btn btn-success gap-2 ${
-                      isExecuting ? "loading" : ""
-                    }`}
-                    onClick={handleSubmitSolution}
-                    disabled={isExecuting}
-                  >
-                    {!isExecuting && <Send className="w-4 h-4" />}
-                    {isExecuting ? "Submitting..." : "Submit Solution"}
-                  </button>
-                </div>
+                <button 
+                  className={`btn btn-sm bg-gradient-to-r from-green-500 to-emerald-600 text-white border-0 hover-glow font-semibold gap-2 ${
+                    isExecuting ? "loading" : ""
+                  }`}
+                  onClick={handleSubmitSolution}
+                  disabled={isExecuting}
+                >
+                  {!isExecuting && <Send className="w-4 h-4" />}
+                  {isExecuting ? "Submitting..." : "Submit Solution"}
+                </button>
               </div>
             </div>
           </div>
         </div>
 
+        {/* Results Section */}
         {runResults && renderRunResults()}
         
         {submission && !runResults && (
-          <div className="card bg-base-100 shadow-xl mt-6">
-            <div className="card-body">
+          <div className="glass-effect rounded-xl mt-6 border border-primary/20">
+            <div className="p-6">
               <Submission submission={submission} />
             </div>
           </div>
         )}
 
         {!submission && !runResults && (
-          <div className="card bg-base-100 shadow-xl mt-6">
-            <div className="card-body">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold">Test Cases</h3>
+          <div className="glass-effect rounded-xl mt-6 border border-primary/20">
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-bold gradient-text">Test Cases</h3>
               </div>
               <div className="overflow-x-auto">
-                <table className="table table-zebra w-full">
+                <table className="table table-sm w-full">
                   <thead>
-                    <tr>
-                      <th>Input</th>
-                      <th>Expected Output</th>
+                    <tr className="border-b border-primary/20">
+                      <th className="text-gray-400">Input</th>
+                      <th className="text-gray-400">Expected Output</th>
                     </tr>
                   </thead>
                   <tbody>
                     {testcases.map((testCase, index) => (
-                      <tr key={index}>
-                        <td className="font-mono">{testCase.input}</td>
-                        <td className="font-mono">{testCase.output}</td>
+                      <tr key={index} className="border-b border-primary/10">
+                        <td className="font-mono text-sm text-gray-300">{testCase.input}</td>
+                        <td className="font-mono text-sm text-gray-300">{testCase.output}</td>
                       </tr>
                     ))}
                   </tbody>
