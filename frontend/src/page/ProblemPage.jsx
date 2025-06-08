@@ -90,6 +90,16 @@ const ProblemPage = () => {
     }
   }, [activeTab, id]);
 
+  // Refresh submissions when a new submission is made
+  useEffect(() => {
+    if (submission && id) {
+      // Refresh submissions list
+      getSubmissionForProblem(id);
+      // Update submission count
+      getSubmissionCountForProblem(id);
+    }
+  }, [submission]);
+
   const handleLanguageChange = (e) => {
     const lang = e.target.value;
     setSelectedLanguage(lang);
@@ -111,7 +121,7 @@ const ProblemPage = () => {
     }
   };
 
-  const handleSubmitSolution = (e) => {
+  const handleSubmitSolution = async (e) => {
     e.preventDefault();
     setRunResults(null);
     
@@ -119,7 +129,7 @@ const ProblemPage = () => {
       const language_id = getLanguageId(selectedLanguage);
       const stdin = problem.testcases.map((tc) => tc.input);
       const expected_outputs = problem.testcases.map((tc) => tc.output);
-      executeCode(code, language_id, stdin, expected_outputs, id);
+      await executeCode(code, language_id, stdin, expected_outputs, id);
     } catch (error) {
       console.log("Error submitting solution", error);
     }
