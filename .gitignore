@@ -20,3 +20,5 @@ backend/src/generated/
 # Editor
 .vscode/
 .idea/
+
+*.md
